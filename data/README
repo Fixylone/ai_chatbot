@@ -1,0 +1,9 @@
+# This directory holds local data files used by the chatbot at runtime.
+#
+# Examples of what belongs here:
+#   - Raw documents to be ingested (PDF, TXT, Markdown)
+#   - ChromaDB persistent vector store (created automatically at first run)
+#   - Any other application-specific data files
+#
+# The directory itself is tracked in git (via this README) but its contents
+# are excluded by .gitignore entries for *.db, chroma/, etc.
