@@ -8,10 +8,25 @@ version = "0.1.0"
 description = "An advanced semantic search AI chatbot for software whitelisting teams."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
-
-[project.optional-dependencies]
-dev = ["pytest"]
+dependencies = [
+    "agentlightning>=0.3.0",
+    "mirascope>=2.2.2",
+]
 
 [tool.hatch.build.targets.wheel]
-packages = ["chatbot"]
+packages = ["src/chatbot"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",           # Modern linter/formater which replaces Black/Flake8
+    "mypy>=1.9.0",           # For strict type check
+]
+
+# Configurartion for the Ruff (Linter and Formater)
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]  # Osnovne greške, importi, moderne Python funkcije
