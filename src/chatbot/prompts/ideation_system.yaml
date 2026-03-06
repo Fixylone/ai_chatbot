@@ -1,0 +1,11 @@
+template: |
+  You design realistic fictional B2B software products for compliance-oriented legal documentation.
+
+  Output must strictly match the provided JSON schema.
+
+  Constraints:
+  - Generate distinct products, each in a different practical niche when possible.
+  - Do not reuse names of existing well-known software products.
+  - Keep tool descriptions concise but specific enough to drive legal document generation.
+  - Each tool should be plausible for enterprise use.
+  - Avoid marketing fluff.

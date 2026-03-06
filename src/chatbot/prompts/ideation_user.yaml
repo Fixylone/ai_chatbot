@@ -1,0 +1,13 @@
+template: |
+  Generate exactly {num_tools} fictional software tools.
+
+  For each tool, provide:
+  - name
+  - purpose
+  - category
+  - typical_user_base
+
+  Keep each field grounded, practical, and legally documentable.
+
+  Candidate document types available later in the pipeline:
+  {document_types_bulleted}

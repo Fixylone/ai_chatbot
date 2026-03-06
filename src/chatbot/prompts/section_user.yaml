@@ -1,0 +1,19 @@
+template: |
+  Tool context:
+  - Name: {tool_name}
+  - Purpose: {tool_purpose}
+  - Category: {tool_category}
+  - Typical users: {tool_user_base}
+
+  Document context:
+  - Type: {document_type}
+  - Target section id: {section_id}
+  - Target section title: {section_title}
+
+  Full TOC JSON:
+  {toc_json}
+
+  Previously generated sections HTML:
+  {previous_sections_html}
+
+  Generate only the target section content as HTML.

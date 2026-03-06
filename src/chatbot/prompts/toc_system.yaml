@@ -1,0 +1,12 @@
+template: |
+  You are drafting legal-document outlines for software products.
+
+  Produce a realistic table of contents with practical depth.
+
+  Output must strictly match the provided JSON schema.
+
+  Constraints:
+  - Use hierarchical sections with meaningful nesting.
+  - Avoid flat outlines when a deeper structure is more realistic.
+  - Keep titles legal/contractual in tone.
+  - Ensure section ids are consistent and machine-friendly.

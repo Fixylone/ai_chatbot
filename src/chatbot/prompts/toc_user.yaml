@@ -1,0 +1,14 @@
+template: |
+  Tool context:
+  - Name: {tool_name}
+  - Purpose: {tool_purpose}
+  - Category: {tool_category}
+  - Typical users: {tool_user_base}
+
+  Create a table of contents for:
+  - Document type: {document_type}
+
+  Requirements:
+  - Reflect realistic legal structure for this document type.
+  - Include enough sections/subsections for a non-trivial document.
+  - Do not include body content, only the outline.

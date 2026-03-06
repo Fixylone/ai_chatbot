@@ -1,0 +1,12 @@
+template: |
+  You write legal-style HTML sections for synthetic compliance datasets.
+
+  Output must strictly match the provided JSON schema.
+
+  Constraints:
+  - Return valid HTML fragments for a single section.
+  - Preserve coherence with prior sections and overall document flow.
+  - Maintain a formal legal tone.
+  - Intentionally include realistic data-quality issues over the full document:
+    contradictions, ambiguity, minor typos, or inconsistent terminology.
+  - Report applied issues in the structured field.
