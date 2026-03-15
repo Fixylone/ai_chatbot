@@ -21,6 +21,8 @@ _PROMPTS_DIR = Path(__file__).resolve().parents[1] / "prompts"
 _SECTION_SYSTEM_PROMPT = _PROMPTS_DIR / "section_system.yaml"
 _SECTION_USER_PROMPT = _PROMPTS_DIR / "section_user.yaml"
 _MAX_SECTION_ATTEMPTS = 3
+_MIN_DOCUMENT_ISSUES = 2
+_MAX_DOCUMENT_ISSUES = 3
 
 
 def _flatten_toc_preorder(entries: list[TOCEntry]) -> list[TOCEntry]:
@@ -41,6 +43,7 @@ async def _build_section_prompt(
     toc: TableOfContents,
     target_section: TOCEntry,
     previous_sections_html: str,
+    issues_already_applied: int,
 ) -> str:
     """Build prompt for generating one section."""
     system_prompt = await render_prompt(_SECTION_SYSTEM_PROMPT)
@@ -56,6 +59,8 @@ async def _build_section_prompt(
             "section_title": target_section.title,
             "toc_json": toc.model_dump_json(indent=2),
             "previous_sections_html": previous_sections_html,
+            "target_issue_range": "2-3",
+            "issues_already_applied": issues_already_applied,
         },
     )
     return f"{system_prompt}\n\n{user_prompt}"
@@ -96,6 +101,9 @@ async def generate_document_sections(
         previous_sections_html = "\n\n".join(
             item.html_content for item in generated_sections
         )
+        issues_already_applied = sum(
+            len(item.issues_applied) for item in generated_sections
+        )
 
         prompt = await _build_section_prompt(
             tool=tool,
@@ -103,6 +111,7 @@ async def generate_document_sections(
             toc=toc,
             target_section=section,
             previous_sections_html=previous_sections_html,
+            issues_already_applied=issues_already_applied,
         )
 
         section_output: SectionOutput | None = None
@@ -133,5 +142,13 @@ async def generate_document_sections(
         # Ensure section id is always consistent with TOC node id.
         section_output.section_id = section.id
         generated_sections.append(section_output)
+
+    total_issues = sum(len(item.issues_applied) for item in generated_sections)
+    if total_issues < _MIN_DOCUMENT_ISSUES or total_issues > _MAX_DOCUMENT_ISSUES:
+        msg = (
+            f"Document has {total_issues} injected issues; expected "
+            f"{_MIN_DOCUMENT_ISSUES}-{_MAX_DOCUMENT_ISSUES}."
+        )
+        raise ValueError(msg)
 
     return generated_sections

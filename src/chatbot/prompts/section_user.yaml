@@ -16,4 +16,9 @@ template: |
   Previously generated sections HTML:
   {previous_sections_html}
 
+  Quality controls for this document:
+  - Required total injected issues across the full document: {target_issue_range}
+  - Issues already injected in previous sections: {issues_already_applied}
+  - Keep this section substantial (typically 2-4 paragraphs unless naturally shorter).
+
   Generate only the target section content as HTML.
