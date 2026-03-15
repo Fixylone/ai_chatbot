@@ -8,7 +8,8 @@ These models serve two purposes:
 
 from pydantic import BaseModel, Field
 
-# -- Step 0: Tool Ideation ---------------------------------------------------
+# -- Tool Ideation ---------------------------------------------------
+
 
 class ToolDescription(BaseModel):
     """A single fictional software tool invented by the LLM."""
@@ -31,7 +32,7 @@ class IdeationResult(BaseModel):
     tools: list[ToolDescription]
 
 
-# -- Step 1: Table of Contents -----------------------------------------------
+# -- Table of Contents -----------------------------------------------
 
 class TOCEntry(BaseModel):
     """A single node in the document outline (recursive).
@@ -58,7 +59,7 @@ class TableOfContents(BaseModel):
     sections: list[TOCEntry]
 
 
-# -- Step 2: Section Generation ----------------------------------------------
+# -- Section Generation ----------------------------------------------
 
 class SectionOutput(BaseModel):
     """LLM output for a single document section."""
@@ -84,3 +85,23 @@ class DocumentRecord(BaseModel):
     toc_path: str
     total_sections: int
     issues_summary: list[str] = Field(default_factory=list)
+
+
+class FileValidationResult(BaseModel):
+    """Validation status for one file."""
+
+    path: str
+    file_type: str
+    is_valid: bool
+    errors: list[str] = Field(default_factory=list)
+
+
+class ValidationReport(BaseModel):
+    """Validation summary across all generated artifacts."""
+
+    total_files: int
+    valid_files: int
+    invalid_files: int
+    html_files: int
+    json_files: int
+    results: list[FileValidationResult] = []

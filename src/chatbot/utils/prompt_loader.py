@@ -45,18 +45,6 @@ def _load_prompt_template_sync(path: Path | str) -> str:
     return template
 
 
-async def load_prompt_template(path: Path | str) -> str:
-    """Load a prompt template from a YAML file asynchronously.
-
-    Args:
-        path: Path to the YAML template file.
-
-    Returns:
-        Template string.
-    """
-    return await asyncio.to_thread(_load_prompt_template_sync, path)
-
-
 def _render_prompt_sync(
     path: Path | str,
     variables: dict[str, Any] | None = None,

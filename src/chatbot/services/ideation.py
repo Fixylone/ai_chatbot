@@ -1,4 +1,4 @@
-"""Step 0: tool ideation service.
+"""Tool ideation service.
 
 Generates fictional software tool descriptions using a reasoning-capable model
 and assigns document types per tool in a reproducible way.

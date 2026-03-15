@@ -1,37 +1,14 @@
-"""Step 8: HTML and JSON validation utilities."""
+"""HTML and JSON validation utilities."""
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
-from typing import Any, cast
 
-from lxml import etree as _etree  # type: ignore[import-untyped]
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import ValidationError
 
-from chatbot.core.models import TableOfContents
-
-etree = cast(Any, _etree)
-
-
-class FileValidationResult(BaseModel):
-    """Validation status for one file."""
-
-    path: str
-    file_type: str
-    is_valid: bool
-    errors: list[str] = Field(default_factory=list)
-
-
-class ValidationReport(BaseModel):
-    """Validation summary across all generated artifacts."""
-
-    total_files: int
-    valid_files: int
-    invalid_files: int
-    html_files: int
-    json_files: int
-    results: list[FileValidationResult] = []
+from chatbot.core.models import FileValidationResult, TableOfContents, ValidationReport
+from chatbot.utils.html_utils import validate_html_document
+from chatbot.utils.json_utils import parse_json_content
 
 
 def validate_html(content: str) -> list[str]:
@@ -43,14 +20,7 @@ def validate_html(content: str) -> list[str]:
     Returns:
         List of validation error messages. Empty means valid.
     """
-    parser = etree.HTMLParser(recover=False)
-
-    try:
-        etree.fromstring(content.encode("utf-8"), parser=parser)
-    except etree.XMLSyntaxError as exc:
-        return [str(exc)]
-
-    return [str(entry) for entry in parser.error_log]
+    return validate_html_document(content)
 
 
 def validate_toc_json_content(content: str) -> list[str]:
@@ -62,10 +32,9 @@ def validate_toc_json_content(content: str) -> list[str]:
     Returns:
         List of errors. Empty means valid.
     """
-    try:
-        payload: Any = json.loads(content)
-    except json.JSONDecodeError as exc:
-        return [f"Invalid JSON syntax: {exc}"]
+    payload, parse_errors = parse_json_content(content)
+    if parse_errors:
+        return parse_errors
 
     try:
         TableOfContents.model_validate(payload)

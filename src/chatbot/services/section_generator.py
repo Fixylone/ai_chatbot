@@ -1,9 +1,8 @@
-"""Step 2: section-by-section HTML generation service."""
+"""Section-by-section HTML generation service."""
 
 from __future__ import annotations
 
 import asyncio
-import re
 from pathlib import Path
 
 from mirascope import llm  # type: ignore[import-untyped]
@@ -15,13 +14,12 @@ from chatbot.core.models import (
     TOCEntry,
     ToolDescription,
 )
+from chatbot.utils.html_utils import is_valid_html_fragment
 from chatbot.utils.prompt_loader import render_prompt
-from chatbot.utils.validation import validate_html
 
 _PROMPTS_DIR = Path(__file__).resolve().parents[1] / "prompts"
 _SECTION_SYSTEM_PROMPT = _PROMPTS_DIR / "section_system.yaml"
 _SECTION_USER_PROMPT = _PROMPTS_DIR / "section_user.yaml"
-_HTML_TAG_PATTERN = re.compile(r"<\s*[a-zA-Z][^>]*>")
 _MAX_SECTION_ATTEMPTS = 3
 
 
@@ -35,19 +33,6 @@ def _flatten_toc_preorder(entries: list[TOCEntry]) -> list[TOCEntry]:
             ordered.extend(_flatten_toc_preorder(entry.children))
 
     return ordered
-
-
-def _is_valid_html_fragment(content: str) -> bool:
-    """Check whether section content is HTML and parseable as a fragment."""
-    if not _HTML_TAG_PATTERN.search(content):
-        return False
-
-    wrapped = (
-        "<!DOCTYPE html><html><body>"
-        f"{content}"
-        "</body></html>"
-    )
-    return not validate_html(wrapped)
 
 
 async def _build_section_prompt(
@@ -134,7 +119,7 @@ async def generate_document_sections(
             response = await asyncio.to_thread(_section_call, call_prompt)
             candidate = response.parse()
 
-            if _is_valid_html_fragment(candidate.html_content):
+            if is_valid_html_fragment(candidate.html_content):
                 section_output = candidate
                 break
 

@@ -1,0 +1,112 @@
+"""CLI entry points for generation and validation."""
+
+from __future__ import annotations
+
+import asyncio
+from pathlib import Path
+from typing import Any
+
+import typer
+
+from chatbot.core.config import load_config
+from chatbot.core.pipeline import run_pipeline
+from chatbot.utils.validation import validate_all
+
+app = typer.Typer(add_completion=False, help="Synthetic legal data generator")
+
+
+def _merge_overrides(**kwargs: Any) -> dict[str, Any]:
+    """Drop ``None`` values and keep only explicit CLI overrides."""
+    return {key: value for key, value in kwargs.items() if value is not None}
+
+
+@app.command()
+def generate(
+    config: Path = typer.Option(Path("config.yaml"), help="Path to YAML config."),
+    toc_model: str | None = typer.Option(None, help="Override TOC model id."),
+    section_model: str | None = typer.Option(
+        None,
+        help="Override section model id.",
+    ),
+    ideation_model: str | None = typer.Option(
+        None,
+        help="Override ideation model id.",
+    ),
+    toc_temperature: float | None = typer.Option(None, help="TOC temperature."),
+    section_temperature: float | None = typer.Option(
+        None,
+        help="Section temperature.",
+    ),
+    ideation_temperature: float | None = typer.Option(
+        None,
+        help="Ideation temperature.",
+    ),
+    top_p: float | None = typer.Option(None, help="Nucleus sampling top_p."),
+    num_tools: int | None = typer.Option(None, help="Number of tools to generate."),
+    docs_per_tool: int | None = typer.Option(
+        None,
+        help="Number of documents per tool.",
+    ),
+    seed: int | None = typer.Option(None, help="Reproducibility seed."),
+    output_dir: Path | None = typer.Option(None, help="Output directory path."),
+    document_type: list[str] | None = typer.Option(
+        None,
+        "--document-type",
+        help="Repeat option to override document type pool.",
+    ),
+) -> None:
+    """Generate full synthetic dataset for Phase 1."""
+    overrides = _merge_overrides(
+        toc_model=toc_model,
+        section_model=section_model,
+        ideation_model=ideation_model,
+        toc_temperature=toc_temperature,
+        section_temperature=section_temperature,
+        ideation_temperature=ideation_temperature,
+        top_p=top_p,
+        num_tools=num_tools,
+        docs_per_tool=docs_per_tool,
+        seed=seed,
+        output_dir=output_dir,
+        document_types=document_type,
+    )
+
+    cfg = load_config(config_path=config, overrides=overrides)
+    records, report = asyncio.run(run_pipeline(cfg))
+
+    typer.echo(
+        f"Generated {len(records)} documents. "
+        f"Validation: {report.valid_files}/{report.total_files} valid files."
+    )
+
+    if report.invalid_files > 0:
+        typer.echo("Invalid files detected:")
+        for result in report.results:
+            if result.is_valid:
+                continue
+            typer.echo(f"- {result.path}")
+            for error in result.errors:
+                typer.echo(f"    * {error}")
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def validate(
+    output_dir: Path = typer.Option(Path("data"), help="Directory to validate."),
+) -> None:
+    """Validate generated HTML and TOC JSON artifacts."""
+    report = validate_all(output_dir)
+    typer.echo(
+        f"Validation summary: {report.valid_files}/{report.total_files} valid "
+        f"(html={report.html_files}, json={report.json_files})."
+    )
+
+    if report.invalid_files > 0:
+        typer.echo("Invalid files:")
+        for result in report.results:
+            if result.is_valid:
+                continue
+            typer.echo(f"- {result.path}")
+            for error in result.errors:
+                typer.echo(f"    * {error}")
+        raise typer.Exit(code=1)

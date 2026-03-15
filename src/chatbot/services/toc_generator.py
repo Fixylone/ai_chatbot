@@ -1,4 +1,4 @@
-"""Step 1: Table-of-contents generation service."""
+"""Table-of-contents generation service."""
 
 from __future__ import annotations
 
@@ -20,8 +20,7 @@ async def _build_toc_prompt(
     tool: ToolDescription,
     document_type: str,
 ) -> str:
-    """Build the final TOC prompt from system and user t
-    emplates."""
+    """Build the final TOC prompt from system and user templates."""
     system_prompt = await render_prompt(_TOC_SYSTEM_PROMPT)
     user_prompt = await render_prompt(
         _TOC_USER_PROMPT,
