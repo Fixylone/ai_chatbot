@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 from pathlib import Path
 
 from mirascope import llm  # type: ignore[import-untyped]
@@ -15,10 +16,13 @@ from chatbot.core.models import (
     ToolDescription,
 )
 from chatbot.utils.prompt_loader import render_prompt
+from chatbot.utils.validation import validate_html
 
 _PROMPTS_DIR = Path(__file__).resolve().parents[1] / "prompts"
 _SECTION_SYSTEM_PROMPT = _PROMPTS_DIR / "section_system.yaml"
 _SECTION_USER_PROMPT = _PROMPTS_DIR / "section_user.yaml"
+_HTML_TAG_PATTERN = re.compile(r"<\s*[a-zA-Z][^>]*>")
+_MAX_SECTION_ATTEMPTS = 3
 
 
 def _flatten_toc_preorder(entries: list[TOCEntry]) -> list[TOCEntry]:
@@ -31,6 +35,19 @@ def _flatten_toc_preorder(entries: list[TOCEntry]) -> list[TOCEntry]:
             ordered.extend(_flatten_toc_preorder(entry.children))
 
     return ordered
+
+
+def _is_valid_html_fragment(content: str) -> bool:
+    """Check whether section content is HTML and parseable as a fragment."""
+    if not _HTML_TAG_PATTERN.search(content):
+        return False
+
+    wrapped = (
+        "<!DOCTYPE html><html><body>"
+        f"{content}"
+        "</body></html>"
+    )
+    return not validate_html(wrapped)
 
 
 async def _build_section_prompt(
@@ -103,8 +120,30 @@ async def generate_document_sections(
             previous_sections_html=previous_sections_html,
         )
 
-        response = await asyncio.to_thread(_section_call, prompt)
-        section_output = response.parse()
+        section_output: SectionOutput | None = None
+
+        for attempt in range(1, _MAX_SECTION_ATTEMPTS + 1):
+            call_prompt = prompt
+            if attempt > 1:
+                call_prompt = (
+                    f"{prompt}\n\n"
+                    "Retry instruction: The previous output was not valid HTML. "
+                    "Return only valid HTML fragment content in html_content."
+                )
+
+            response = await asyncio.to_thread(_section_call, call_prompt)
+            candidate = response.parse()
+
+            if _is_valid_html_fragment(candidate.html_content):
+                section_output = candidate
+                break
+
+        if section_output is None:
+            msg = (
+                f"Model failed to generate valid HTML fragment for section "
+                f"'{section.id}' after {_MAX_SECTION_ATTEMPTS} attempts."
+            )
+            raise ValueError(msg)
 
         # Ensure section id is always consistent with TOC node id.
         section_output.section_id = section.id

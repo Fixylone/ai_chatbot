@@ -5,6 +5,7 @@ template: |
 
   Constraints:
   - Return valid HTML fragments for a single section.
+  - Do not return plain text; html_content must contain HTML tags.
   - Preserve coherence with prior sections and overall document flow.
   - Maintain a formal legal tone.
   - Intentionally include realistic data-quality issues over the full document:
