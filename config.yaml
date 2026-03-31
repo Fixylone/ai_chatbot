@@ -1,14 +1,14 @@
 # Phase 1 — Synthetic Data Generation Configuration
 # Override with env vars (CHATBOT_* prefix) or CLI flags.
 
-# LLM models (mirascope format: "provider/model-name")
-toc_model: "openai/gpt-4o" # TOC generation (reasoning-capable)
-section_model: "openai/gpt-4o-mini" # Section content (cost-effective)
-ideation_model: "openai/gpt-4o" # Tool ideation (creative)
+# LLM models (IDs supported by your gateway)
+toc_model: "openai/l2-gpt-4.1-mini" # TOC generation (reasoning-focused)
+section_model: "openai/l2-gpt-4o-mini" # Section content (cost-effective)
+ideation_model: "openai/l2-gpt-4.1-nano" # Tool ideation (creative)
 
 # Sampling
-toc_temperature: 0.8
-section_temperature: 0.7
+toc_temperature: 0.3
+section_temperature: 0.5
 ideation_temperature: 0.9
 top_p: 0.95
 
@@ -23,8 +23,21 @@ document_types:
   - "Security Whitepaper"
   - "Compliance & Certifications"
 
-# Reproducibility
-seed: 42
+# Runtime retry strategy
+rate_limit_max_retries: 3
+rate_limit_base_backoff_seconds: 2.0
+rate_limit_max_backoff_seconds: 60.0
+runtime_feedback: true
+
+# Optional prompt caching controls
+prompt_caching_enabled: false
+prompt_cache_retention: "in_memory"
+prompt_cache_key_namespace: "chatbot"
+
+# Section context compression controls
+section_summary_max_sections: 8
+section_summary_max_chars: 1600
+section_last_section_max_chars: 5000
 
 # Output directory (relative to project root)
 output_dir: "data"

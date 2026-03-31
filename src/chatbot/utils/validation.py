@@ -6,8 +6,16 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from chatbot.core.models import FileValidationResult, TableOfContents, ValidationReport
-from chatbot.utils.html_utils import validate_html_document
+from chatbot.core.models import (
+    DocumentIssueManifest,
+    FileValidationResult,
+    TableOfContents,
+    ValidationReport,
+)
+from chatbot.utils.html_utils import (
+    contains_unresolved_company_placeholder,
+    validate_html_document,
+)
 from chatbot.utils.json_utils import parse_json_content
 
 
@@ -20,7 +28,18 @@ def validate_html(content: str) -> list[str]:
     Returns:
         List of validation error messages. Empty means valid.
     """
-    return validate_html_document(content)
+    errors = validate_html_document(content)
+    if contains_unresolved_company_placeholder(content):
+        errors.append(
+            "Unresolved company placeholder detected ([CompanyName] or "
+            "[Company Name])."
+        )
+    if errors and any("line" in error.lower() for error in errors):
+        errors.append(
+            "HTML parser line numbers refer to the final assembled document "
+            "lines (not the original section prompt)."
+        )
+    return errors
 
 
 def validate_toc_json_content(content: str) -> list[str]:
@@ -38,6 +57,20 @@ def validate_toc_json_content(content: str) -> list[str]:
 
     try:
         TableOfContents.model_validate(payload)
+    except ValidationError as exc:
+        return [f"Schema validation failed: {exc}"]
+
+    return []
+
+
+def validate_issues_json_content(content: str) -> list[str]:
+    """Validate issues-manifest JSON content against the Pydantic schema."""
+    payload, parse_errors = parse_json_content(content)
+    if parse_errors:
+        return parse_errors
+
+    try:
+        DocumentIssueManifest.model_validate(payload)
     except ValidationError as exc:
         return [f"Schema validation failed: {exc}"]
 
@@ -65,7 +98,13 @@ def validate_file(path: Path) -> FileValidationResult:
         )
 
     if path.suffix.lower() == ".json":
-        errors = validate_toc_json_content(content)
+        name = path.name.lower()
+        if name.startswith("toc_"):
+            errors = validate_toc_json_content(content)
+        elif name.startswith("issues_"):
+            errors = validate_issues_json_content(content)
+        else:
+            errors = ["Unsupported JSON artifact type"]
         return FileValidationResult(
             path=str(path),
             file_type="json",
@@ -82,7 +121,7 @@ def validate_file(path: Path) -> FileValidationResult:
 
 
 def validate_all(output_dir: Path) -> ValidationReport:
-    """Validate all generated HTML and TOC JSON artifacts.
+    """Validate all generated HTML and JSON artifacts.
 
     Args:
         output_dir: Root output directory.
@@ -91,7 +130,9 @@ def validate_all(output_dir: Path) -> ValidationReport:
         Aggregated validation report.
     """
     html_paths = sorted(output_dir.rglob("*.html"))
-    json_paths = sorted(output_dir.rglob("toc_*.json"))
+    toc_json_paths = sorted(output_dir.rglob("toc_*.json"))
+    issues_json_paths = sorted(output_dir.rglob("issues_*.json"))
+    json_paths = [*toc_json_paths, *issues_json_paths]
 
     results: list[FileValidationResult] = [
         validate_file(path) for path in [*html_paths, *json_paths]

@@ -10,3 +10,5 @@ template: |
   - Avoid flat outlines when a deeper structure is more realistic.
   - Keep titles legal/contractual in tone.
   - Ensure section ids are consistent and machine-friendly.
+  - Every section node must include: id, title, and children.
+  - For leaf nodes, set children to an empty array ([]).

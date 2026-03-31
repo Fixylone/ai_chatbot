@@ -1,0 +1,263 @@
+{
+  "document_type": "Terms of Service",
+  "tool_name": "CompliDraft Pro",
+  "sections": [
+    {
+      "id": "1",
+      "title": "Introduction",
+      "children": [
+        {
+          "id": "1.1",
+          "title": "Acceptance of Terms",
+          "children": []
+        },
+        {
+          "id": "1.2",
+          "title": "Modifications to Terms",
+          "children": []
+        },
+        {
+          "id": "1.3",
+          "title": "Eligibility",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "User Accounts",
+      "children": [
+        {
+          "id": "2.1",
+          "title": "Account Registration",
+          "children": []
+        },
+        {
+          "id": "2.2",
+          "title": "Account Security",
+          "children": []
+        },
+        {
+          "id": "2.3",
+          "title": "Account Termination",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Use of the Service",
+      "children": [
+        {
+          "id": "3.1",
+          "title": "Permitted Use",
+          "children": []
+        },
+        {
+          "id": "3.2",
+          "title": "Prohibited Conduct",
+          "children": [
+            {
+              "id": "3.2.1",
+              "title": "Illegal Activities",
+              "children": []
+            },
+            {
+              "id": "3.2.2",
+              "title": "Unauthorized Access",
+              "children": []
+            },
+            {
+              "id": "3.2.3",
+              "title": "Interference with Service",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "3.3",
+          "title": "User Content",
+          "children": [
+            {
+              "id": "3.3.1",
+              "title": "Content Ownership",
+              "children": []
+            },
+            {
+              "id": "3.3.2",
+              "title": "Content License",
+              "children": []
+            },
+            {
+              "id": "3.3.3",
+              "title": "Content Monitoring and Removal",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Intellectual Property Rights",
+      "children": [
+        {
+          "id": "4.1",
+          "title": "Ownership of Service Content",
+          "children": []
+        },
+        {
+          "id": "4.2",
+          "title": "Trademarks and Logos",
+          "children": []
+        },
+        {
+          "id": "4.3",
+          "title": "User Feedback",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Privacy and Data Protection",
+      "children": [
+        {
+          "id": "5.1",
+          "title": "Data Collection",
+          "children": []
+        },
+        {
+          "id": "5.2",
+          "title": "Use of Personal Data",
+          "children": []
+        },
+        {
+          "id": "5.3",
+          "title": "Data Security Measures",
+          "children": []
+        },
+        {
+          "id": "5.4",
+          "title": "User Rights and Controls",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Payment and Fees",
+      "children": [
+        {
+          "id": "6.1",
+          "title": "Pricing and Billing",
+          "children": []
+        },
+        {
+          "id": "6.2",
+          "title": "Refund Policy",
+          "children": []
+        },
+        {
+          "id": "6.3",
+          "title": "Suspension for Non-Payment",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Disclaimers and Limitation of Liability",
+      "children": [
+        {
+          "id": "7.1",
+          "title": "Disclaimer of Warranties",
+          "children": []
+        },
+        {
+          "id": "7.2",
+          "title": "Limitation of Liability",
+          "children": []
+        },
+        {
+          "id": "7.3",
+          "title": "Indemnification",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Termination and Suspension",
+      "children": [
+        {
+          "id": "8.1",
+          "title": "Termination by User",
+          "children": []
+        },
+        {
+          "id": "8.2",
+          "title": "Termination by Provider",
+          "children": []
+        },
+        {
+          "id": "8.3",
+          "title": "Effect of Termination",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "Governing Law and Dispute Resolution",
+      "children": [
+        {
+          "id": "9.1",
+          "title": "Governing Law",
+          "children": []
+        },
+        {
+          "id": "9.2",
+          "title": "Arbitration Agreement",
+          "children": []
+        },
+        {
+          "id": "9.3",
+          "title": "Class Action Waiver",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Miscellaneous Provisions",
+      "children": [
+        {
+          "id": "10.1",
+          "title": "Force Majeure",
+          "children": []
+        },
+        {
+          "id": "10.2",
+          "title": "Severability",
+          "children": []
+        },
+        {
+          "id": "10.3",
+          "title": "Entire Agreement",
+          "children": []
+        },
+        {
+          "id": "10.4",
+          "title": "Assignment",
+          "children": []
+        },
+        {
+          "id": "10.5",
+          "title": "Contact Information",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -2,27 +2,36 @@
 
 from __future__ import annotations
 
-import asyncio
 from pathlib import Path
 
 from mirascope import llm  # type: ignore[import-untyped]
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import (
+    SectionLLMOutput,
     SectionOutput,
     TableOfContents,
     TOCEntry,
     ToolDescription,
 )
-from chatbot.utils.html_utils import is_valid_html_fragment
+from chatbot.services.issue_plan_manager import IssuePlanManager, SectionIssueRequirement
+from chatbot.services.section_context_compressor import SectionContextCompressor
+from chatbot.utils.html_utils import (
+    contains_unresolved_company_placeholder,
+    is_valid_html_fragment,
+)
+from chatbot.utils.llm_params import (
+    build_llm_call_kwargs,
+    build_prompt_cache_key,
+    is_prompt_cache_param_error,
+)
+from chatbot.utils.llm_runtime import call_llm_with_retries
 from chatbot.utils.prompt_loader import render_prompt
 
 _PROMPTS_DIR = Path(__file__).resolve().parents[1] / "prompts"
 _SECTION_SYSTEM_PROMPT = _PROMPTS_DIR / "section_system.yaml"
 _SECTION_USER_PROMPT = _PROMPTS_DIR / "section_user.yaml"
 _MAX_SECTION_ATTEMPTS = 3
-_MIN_DOCUMENT_ISSUES = 2
-_MAX_DOCUMENT_ISSUES = 3
 
 
 def _flatten_toc_preorder(entries: list[TOCEntry]) -> list[TOCEntry]:
@@ -40,10 +49,11 @@ def _flatten_toc_preorder(entries: list[TOCEntry]) -> list[TOCEntry]:
 async def _build_section_prompt(
     tool: ToolDescription,
     document_type: str,
-    toc: TableOfContents,
+    toc_json: str,
     target_section: TOCEntry,
-    previous_sections_html: str,
-    issues_already_applied: int,
+    previous_sections_summary: str,
+    last_full_section_html: str,
+    issue_requirement: SectionIssueRequirement,
 ) -> str:
     """Build prompt for generating one section."""
     system_prompt = await render_prompt(_SECTION_SYSTEM_PROMPT)
@@ -57,10 +67,14 @@ async def _build_section_prompt(
             "document_type": document_type,
             "section_id": target_section.id,
             "section_title": target_section.title,
-            "toc_json": toc.model_dump_json(indent=2),
-            "previous_sections_html": previous_sections_html,
+            "toc_json": toc_json,
+            "previous_sections_summary": previous_sections_summary,
+            "last_full_section_html": last_full_section_html,
             "target_issue_range": "2-3",
-            "issues_already_applied": issues_already_applied,
+            "target_issue_total": issue_requirement.target_issue_total,
+            "required_issue_count": issue_requirement.required_issue_count,
+            "required_issue_label": issue_requirement.required_issue_label
+            or "none",
         },
     )
     return f"{system_prompt}\n\n{user_prompt}"
@@ -75,43 +89,88 @@ async def generate_document_sections(
 
     Each section call receives all previously generated sections to preserve
     coherence and logical flow.
-
-    Args:
-        config: Generation settings.
-        tool: Tool context.
-        toc: TOC for the target document.
-
-    Returns:
-        Ordered section outputs matching TOC traversal.
     """
     ordered_sections = _flatten_toc_preorder(toc.sections)
+    issue_plan_manager = IssuePlanManager(ordered_sections)
+    context_compressor = SectionContextCompressor(
+        max_summary_sections=config.section_summary_max_sections,
+        max_summary_chars=config.section_summary_max_chars,
+        max_last_section_chars=config.section_last_section_max_chars,
+    )
+
     generated_sections: list[SectionOutput] = []
+    total_issues_applied = 0
+    target_issue_total = issue_plan_manager.target_issue_total
+
+    if config.runtime_feedback:
+        print(
+            "[issues] "
+            f"target_total={target_issue_total} "
+            f"document_type={toc.document_type}",
+            flush=True,
+        )
+
+    base_call_kwargs = build_llm_call_kwargs(
+        temperature=config.section_temperature,
+        top_p=config.top_p,
+    )
 
     @llm.call(
         config.section_model,
-        format=llm.format(SectionOutput, mode="strict"),
-        temperature=config.section_temperature,
-        top_p=config.top_p,
-        seed=config.seed,
+        format=llm.format(SectionLLMOutput, mode="strict"),
+        **base_call_kwargs,
     )
     def _section_call(prompt_text: str) -> str:
         return prompt_text
 
+    active_section_call = _section_call
+    if config.prompt_caching_enabled:
+        cache_call_kwargs = build_llm_call_kwargs(
+            temperature=config.section_temperature,
+            top_p=config.top_p,
+            prompt_cache_key=build_prompt_cache_key(
+                config.prompt_cache_key_namespace,
+                ["section", config.section_model, tool.name, toc.document_type],
+            ),
+            prompt_cache_retention=config.prompt_cache_retention,
+        )
+
+        @llm.call(
+            config.section_model,
+            format=llm.format(SectionLLMOutput, mode="strict"),
+            **cache_call_kwargs,
+        )
+        def _section_call_cached(prompt_text: str) -> str:
+            return prompt_text
+
+        active_section_call = _section_call_cached
+
+    toc_json = toc.model_dump_json()
+
     for section in ordered_sections:
-        previous_sections_html = "\n\n".join(
-            item.html_content for item in generated_sections
+        compressed_context = context_compressor.current_context()
+        section_requirement = issue_plan_manager.requirement_for(
+            section.id,
+            total_issues_applied,
         )
-        issues_already_applied = sum(
-            len(item.issues_applied) for item in generated_sections
-        )
+
+        if config.runtime_feedback:
+            print(
+                "[issues] "
+                f"section={section.id} "
+                f"remaining={section_requirement.issues_remaining} "
+                f"required={section_requirement.required_issue_count}",
+                flush=True,
+            )
 
         prompt = await _build_section_prompt(
             tool=tool,
             document_type=toc.document_type,
-            toc=toc,
+            toc_json=toc_json,
             target_section=section,
-            previous_sections_html=previous_sections_html,
-            issues_already_applied=issues_already_applied,
+            previous_sections_summary=compressed_context.previous_sections_summary,
+            last_full_section_html=compressed_context.last_full_section_html,
+            issue_requirement=section_requirement,
         )
 
         section_output: SectionOutput | None = None
@@ -121,34 +180,83 @@ async def generate_document_sections(
             if attempt > 1:
                 call_prompt = (
                     f"{prompt}\n\n"
-                    "Retry instruction: The previous output was not valid HTML. "
-                    "Return only valid HTML fragment content in html_content."
+                    "Retry instruction: Return valid HTML fragment content in "
+                    "html_content, use no unresolved placeholders like "
+                    "[CompanyName] or [Company Name], and "
+                    "match issues_applied exactly to required_issue_count and "
+                    "required_issue_label."
                 )
 
-            response = await asyncio.to_thread(_section_call, call_prompt)
-            candidate = response.parse()
+            stage_name = f"section:{toc.document_type}:{section.id}:attempt-{attempt}"
+            try:
+                response = await call_llm_with_retries(
+                    active_section_call,
+                    call_prompt,
+                    config,
+                    stage=stage_name,
+                    model_id=config.section_model,
+                )
+            except Exception as exc:
+                if (
+                    not config.prompt_caching_enabled
+                    or active_section_call is _section_call
+                    or not is_prompt_cache_param_error(exc)
+                ):
+                    raise
+                if config.runtime_feedback:
+                    print(
+                        "[cache] stage=section provider rejected cache params; "
+                        "retrying without cache options",
+                        flush=True,
+                    )
+                active_section_call = _section_call
+                response = await call_llm_with_retries(
+                    active_section_call,
+                    call_prompt,
+                    config,
+                    stage=stage_name,
+                    model_id=config.section_model,
+                )
 
-            if is_valid_html_fragment(candidate.html_content):
-                section_output = candidate
+            candidate = response.parse()
+            issues_match = issue_plan_manager.issues_match(
+                section.id,
+                candidate.issues_applied,
+            )
+            has_placeholder = contains_unresolved_company_placeholder(
+                candidate.html_content
+            )
+            is_valid_html = False
+            if issues_match and not has_placeholder:
+                is_valid_html = is_valid_html_fragment(candidate.html_content)
+
+            if is_valid_html and issues_match and not has_placeholder:
+                section_output = SectionOutput(
+                    section_id=section.id,
+                    html_content=candidate.html_content,
+                    issues_applied=candidate.issues_applied,
+                )
                 break
 
         if section_output is None:
+            expected_issues = (
+                "[]"
+                if section_requirement.required_issue_label is None
+                else f'["{section_requirement.required_issue_label}"]'
+            )
             msg = (
-                f"Model failed to generate valid HTML fragment for section "
-                f"'{section.id}' after {_MAX_SECTION_ATTEMPTS} attempts."
+                f"Model failed section '{section.id}' after "
+                f"{_MAX_SECTION_ATTEMPTS} attempts. Expected issues_applied="
+                f"{expected_issues}, valid HTML fragment, and no unresolved "
+                "[CompanyName]/[Company Name] placeholder."
             )
             raise ValueError(msg)
 
-        # Ensure section id is always consistent with TOC node id.
-        section_output.section_id = section.id
         generated_sections.append(section_output)
+        total_issues_applied += len(section_output.issues_applied)
+        context_compressor.observe_section(section_output)
 
-    total_issues = sum(len(item.issues_applied) for item in generated_sections)
-    if total_issues < _MIN_DOCUMENT_ISSUES or total_issues > _MAX_DOCUMENT_ISSUES:
-        msg = (
-            f"Document has {total_issues} injected issues; expected "
-            f"{_MIN_DOCUMENT_ISSUES}-{_MAX_DOCUMENT_ISSUES}."
-        )
-        raise ValueError(msg)
+    issue_plan_manager.validate_document_totals(total_issues_applied)
 
     return generated_sections
+

@@ -23,6 +23,11 @@ def build_toc_json_filename(document_type: str) -> str:
     return f"toc_{_slugify(document_type)}.json"
 
 
+def build_issue_manifest_filename(document_type: str) -> str:
+    """Build per-document issues manifest filename."""
+    return f"issues_{_slugify(document_type)}.json"
+
+
 async def write_json_file(path: Path, payload: dict[str, Any]) -> None:
     """Write JSON payload to disk asynchronously."""
     path.parent.mkdir(parents=True, exist_ok=True)

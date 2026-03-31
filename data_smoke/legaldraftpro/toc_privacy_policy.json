@@ -1,0 +1,299 @@
+{
+  "document_type": "Privacy Policy",
+  "tool_name": "LegalDraftPro",
+  "sections": [
+    {
+      "id": "1",
+      "title": "Introduction",
+      "children": [
+        {
+          "id": "1.1",
+          "title": "Purpose of the Privacy Policy",
+          "children": []
+        },
+        {
+          "id": "1.2",
+          "title": "Scope and Applicability",
+          "children": []
+        },
+        {
+          "id": "1.3",
+          "title": "Definitions",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Information We Collect",
+      "children": [
+        {
+          "id": "2.1",
+          "title": "Personal Information",
+          "children": [
+            {
+              "id": "2.1.1",
+              "title": "Identity Data",
+              "children": []
+            },
+            {
+              "id": "2.1.2",
+              "title": "Contact Data",
+              "children": []
+            },
+            {
+              "id": "2.1.3",
+              "title": "Account Credentials",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "2.2",
+          "title": "Usage Data",
+          "children": []
+        },
+        {
+          "id": "2.3",
+          "title": "Technical Data",
+          "children": []
+        },
+        {
+          "id": "2.4",
+          "title": "Cookies and Tracking Technologies",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "How We Use Your Information",
+      "children": [
+        {
+          "id": "3.1",
+          "title": "Provision of Services",
+          "children": []
+        },
+        {
+          "id": "3.2",
+          "title": "Improvement of Services",
+          "children": []
+        },
+        {
+          "id": "3.3",
+          "title": "Marketing and Communications",
+          "children": []
+        },
+        {
+          "id": "3.4",
+          "title": "Compliance with Legal Obligations",
+          "children": []
+        },
+        {
+          "id": "3.5",
+          "title": "Fraud Prevention and Security",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Legal Bases for Processing",
+      "children": [
+        {
+          "id": "4.1",
+          "title": "Consent",
+          "children": []
+        },
+        {
+          "id": "4.2",
+          "title": "Performance of Contract",
+          "children": []
+        },
+        {
+          "id": "4.3",
+          "title": "Legal Obligation",
+          "children": []
+        },
+        {
+          "id": "4.4",
+          "title": "Legitimate Interests",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Data Sharing and Disclosure",
+      "children": [
+        {
+          "id": "5.1",
+          "title": "Third-Party Service Providers",
+          "children": []
+        },
+        {
+          "id": "5.2",
+          "title": "Business Transfers",
+          "children": []
+        },
+        {
+          "id": "5.3",
+          "title": "Legal Requirements and Law Enforcement",
+          "children": []
+        },
+        {
+          "id": "5.4",
+          "title": "Aggregated and Anonymized Data",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "International Data Transfers",
+      "children": [
+        {
+          "id": "6.1",
+          "title": "Transfer Mechanisms",
+          "children": []
+        },
+        {
+          "id": "6.2",
+          "title": "Safeguards and Protections",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Data Retention",
+      "children": [
+        {
+          "id": "7.1",
+          "title": "Retention Periods",
+          "children": []
+        },
+        {
+          "id": "7.2",
+          "title": "Criteria for Retention",
+          "children": []
+        },
+        {
+          "id": "7.3",
+          "title": "Data Deletion and Anonymization",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Your Rights and Choices",
+      "children": [
+        {
+          "id": "8.1",
+          "title": "Access and Correction",
+          "children": []
+        },
+        {
+          "id": "8.2",
+          "title": "Data Portability",
+          "children": []
+        },
+        {
+          "id": "8.3",
+          "title": "Right to Erasure",
+          "children": []
+        },
+        {
+          "id": "8.4",
+          "title": "Restriction of Processing",
+          "children": []
+        },
+        {
+          "id": "8.5",
+          "title": "Objection to Processing",
+          "children": []
+        },
+        {
+          "id": "8.6",
+          "title": "Withdrawal of Consent",
+          "children": []
+        },
+        {
+          "id": "8.7",
+          "title": "Opt-Out of Marketing Communications",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "Security Measures",
+      "children": [
+        {
+          "id": "9.1",
+          "title": "Technical Safeguards",
+          "children": []
+        },
+        {
+          "id": "9.2",
+          "title": "Organizational Measures",
+          "children": []
+        },
+        {
+          "id": "9.3",
+          "title": "Incident Response and Breach Notification",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Children's Privacy",
+      "children": [
+        {
+          "id": "10.1",
+          "title": "Age Restrictions",
+          "children": []
+        },
+        {
+          "id": "10.2",
+          "title": "Parental Consent",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Changes to This Privacy Policy",
+      "children": [
+        {
+          "id": "11.1",
+          "title": "Notification of Changes",
+          "children": []
+        },
+        {
+          "id": "11.2",
+          "title": "Effective Date",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Contact Information",
+      "children": [
+        {
+          "id": "12.1",
+          "title": "Data Protection Officer",
+          "children": []
+        },
+        {
+          "id": "12.2",
+          "title": "How to Contact Us",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

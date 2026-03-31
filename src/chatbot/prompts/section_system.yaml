@@ -6,10 +6,15 @@ template: |
   Constraints:
   - Return valid HTML fragments for a single section.
   - Do not return plain text; html_content must contain HTML tags.
+  - Always include issues_applied as a JSON array (empty array when no issue).
   - Preserve coherence with prior sections and overall document flow.
   - Keep sections substantive; avoid very short generic text.
   - Use real-world legal writing density similar to SLA and policy documents.
   - Maintain a formal legal tone.
+  - Use the provided tool name directly; do not use placeholders like [CompanyName] or [Company Name].
   - Intentionally include realistic data-quality issues over the full document:
     contradictions, ambiguity, minor typos, or inconsistent terminology.
+  - When an issue is applied, use one canonical label from:
+    contradictory_clause, ambiguous_language,
+    minor_typo_or_formatting, inconsistent_terminology_or_cross_reference.
   - Report applied issues in the structured field.

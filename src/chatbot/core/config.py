@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 import yaml
 from pydantic import Field, field_validator, model_validator
@@ -39,14 +39,14 @@ class GenerationConfig(BaseSettings):
         extra="ignore",
     )
 
-    # LLM model identifiers (mirascope format: "provider/model-name")
-    toc_model: str = Field(default="openai/gpt-4o")
-    section_model: str = Field(default="openai/gpt-4o-mini")
-    ideation_model: str = Field(default="openai/gpt-4o")
+    # LLM model identifiers (provider-specific ID passed to mirascope/litellm)
+    toc_model: str = Field(default="openai/l2-gpt-4.1-mini", min_length=1)
+    section_model: str = Field(default="openai/l2-gpt-4o-mini", min_length=1)
+    ideation_model: str = Field(default="openai/l2-gpt-4.1-nano", min_length=1)
 
     # Sampling parameters
-    toc_temperature: float = Field(default=0.8, ge=0.0, le=2.0)
-    section_temperature: float = Field(default=0.7, ge=0.0, le=2.0)
+    toc_temperature: float = Field(default=0.3, ge=0.0, le=2.0)
+    section_temperature: float = Field(default=0.5, ge=0.0, le=2.0)
     ideation_temperature: float = Field(default=0.9, ge=0.0, le=2.0)
     top_p: float = Field(default=0.95, ge=0.0, le=1.0)
 
@@ -57,8 +57,23 @@ class GenerationConfig(BaseSettings):
         default_factory=lambda: list(ALL_DOCUMENT_TYPES),
     )
 
-    # Reproducibility
-    seed: int = Field(default=42)
+    # Runtime retry controls
+    rate_limit_max_retries: int = Field(default=3, ge=0, le=10)
+    rate_limit_base_backoff_seconds: float = Field(default=2.0, ge=0.1, le=120.0)
+    rate_limit_max_backoff_seconds: float = Field(default=60.0, ge=1.0, le=600.0)
+    runtime_feedback: bool = Field(default=True)
+
+    # Optional prompt caching controls
+    prompt_caching_enabled: bool = Field(default=False)
+    prompt_cache_retention: Literal["in_memory", "24h"] = Field(
+        default="in_memory"
+    )
+    prompt_cache_key_namespace: str = Field(default="chatbot", min_length=1)
+
+    # Section context compression controls
+    section_summary_max_sections: int = Field(default=8, ge=1, le=50)
+    section_summary_max_chars: int = Field(default=1600, ge=200, le=10000)
+    section_last_section_max_chars: int = Field(default=5000, ge=500, le=20000)
 
     # Output path (resolved relative to project root)
     output_dir: Path = Field(default=Path("data"))
@@ -91,6 +106,22 @@ class GenerationConfig(BaseSettings):
             msg = (
                 f"docs_per_tool ({self.docs_per_tool}) exceeds "
                 f"document_types ({len(self.document_types)})"
+            )
+            raise ValueError(msg)
+        return self
+
+    @model_validator(mode="after")
+    def _check_model_diversity(self) -> GenerationConfig:
+        """Require at least two distinct generation models."""
+        model_ids = {
+            self.toc_model.strip(),
+            self.section_model.strip(),
+            self.ideation_model.strip(),
+        }
+        if len(model_ids) < 2:
+            msg = (
+                "At least two distinct models are required across "
+                "toc_model, section_model, and ideation_model."
             )
             raise ValueError(msg)
         return self

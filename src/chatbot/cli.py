@@ -47,7 +47,46 @@ def generate(
         None,
         help="Number of documents per tool.",
     ),
-    seed: int | None = typer.Option(None, help="Reproducibility seed."),
+    rate_limit_max_retries: int | None = typer.Option(
+        None,
+        help="Retries for rate limit (429) failures.",
+    ),
+    rate_limit_base_backoff_seconds: float | None = typer.Option(
+        None,
+        help="Base retry backoff seconds for 429 handling.",
+    ),
+    rate_limit_max_backoff_seconds: float | None = typer.Option(
+        None,
+        help="Maximum retry backoff seconds for 429 handling.",
+    ),
+    runtime_feedback: bool | None = typer.Option(
+        None,
+        help="Enable live runtime feedback while generation is running.",
+    ),
+    prompt_caching_enabled: bool | None = typer.Option(
+        None,
+        help="Enable provider prompt caching request parameters.",
+    ),
+    prompt_cache_retention: str | None = typer.Option(
+        None,
+        help="Prompt cache retention policy: in_memory or 24h.",
+    ),
+    prompt_cache_key_namespace: str | None = typer.Option(
+        None,
+        help="Namespace used when building prompt cache keys.",
+    ),
+    section_summary_max_sections: int | None = typer.Option(
+        None,
+        help="Max previous sections summarized in compressed context.",
+    ),
+    section_summary_max_chars: int | None = typer.Option(
+        None,
+        help="Max characters in previous-sections summary.",
+    ),
+    section_last_section_max_chars: int | None = typer.Option(
+        None,
+        help="Max characters kept for last full section HTML context.",
+    ),
     output_dir: Path | None = typer.Option(None, help="Output directory path."),
     document_type: list[str] | None = typer.Option(
         None,
@@ -66,7 +105,16 @@ def generate(
         top_p=top_p,
         num_tools=num_tools,
         docs_per_tool=docs_per_tool,
-        seed=seed,
+        rate_limit_max_retries=rate_limit_max_retries,
+        rate_limit_base_backoff_seconds=rate_limit_base_backoff_seconds,
+        rate_limit_max_backoff_seconds=rate_limit_max_backoff_seconds,
+        runtime_feedback=runtime_feedback,
+        prompt_caching_enabled=prompt_caching_enabled,
+        prompt_cache_retention=prompt_cache_retention,
+        prompt_cache_key_namespace=prompt_cache_key_namespace,
+        section_summary_max_sections=section_summary_max_sections,
+        section_summary_max_chars=section_summary_max_chars,
+        section_last_section_max_chars=section_last_section_max_chars,
         output_dir=output_dir,
         document_types=document_type,
     )
@@ -94,7 +142,7 @@ def generate(
 def validate(
     output_dir: Path = typer.Option(Path("data"), help="Directory to validate."),
 ) -> None:
-    """Validate generated HTML and TOC JSON artifacts."""
+    """Validate generated HTML and JSON artifacts."""
     report = validate_all(output_dir)
     typer.echo(
         f"Validation summary: {report.valid_files}/{report.total_files} valid "

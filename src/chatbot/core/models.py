@@ -26,10 +26,27 @@ class ToolDescription(BaseModel):
     )
 
 
+class ToolIdea(BaseModel):
+    """LLM-only tool payload produced by the ideation stage."""
+
+    name: str = Field(description="Product name (e.g. 'VaultSync')")
+    purpose: str = Field(description="One-sentence purpose statement")
+    category: str = Field(description="Industry vertical (e.g. FinTech)")
+    typical_user_base: str = Field(
+        description="Target audience (e.g. 'Enterprise IT admins')"
+    )
+
+
 class IdeationResult(BaseModel):
     """Batch response from the tool ideation step."""
 
     tools: list[ToolDescription]
+
+
+class IdeationLLMResult(BaseModel):
+    """Strict schema used only for ideation structured output."""
+
+    tools: list[ToolIdea]
 
 
 # -- Table of Contents -----------------------------------------------
@@ -59,6 +76,25 @@ class TableOfContents(BaseModel):
     sections: list[TOCEntry]
 
 
+class TOCEntryLLM(BaseModel):
+    """LLM-only TOC node schema with explicit required fields."""
+
+    id: str = Field(description="Section identifier (e.g. '2.1.3')")
+    title: str = Field(description="Section heading text")
+    children: list["TOCEntryLLM"] = Field(  # pyright: ignore[reportUnknownVariableType]
+        description="Nested sub-sections; use [] when leaf"
+    )
+
+
+TOCEntryLLM.model_rebuild()
+
+
+class TableOfContentsLLM(BaseModel):
+    """Strict schema used only for TOC structured output."""
+
+    sections: list[TOCEntryLLM]
+
+
 # -- Section Generation ----------------------------------------------
 
 class SectionOutput(BaseModel):
@@ -74,6 +110,33 @@ class SectionOutput(BaseModel):
     )
 
 
+class SectionLLMOutput(BaseModel):
+    """Strict schema used only for section structured output."""
+
+    html_content: str = Field(
+        description="Generated HTML fragment for this section"
+    )
+    issues_applied: list[str] = Field(
+        description="Data quality issues injected in this section"
+    )
+
+
+class SectionIssueManifestEntry(BaseModel):
+    """Issue manifest entry for one generated section."""
+
+    section_id: str
+    issues_applied: list[str] = Field(default_factory=list)
+
+
+class DocumentIssueManifest(BaseModel):
+    """Per-document issue manifest artifact."""
+
+    tool_name: str
+    document_type: str
+    total_issues: int
+    sections: list[SectionIssueManifestEntry]
+
+
 # -- Pipeline metadata -------------------------------------------------------
 
 class DocumentRecord(BaseModel):
@@ -83,6 +146,7 @@ class DocumentRecord(BaseModel):
     document_type: str
     html_path: str
     toc_path: str
+    issues_manifest_path: str
     total_sections: int
     issues_summary: list[str] = Field(default_factory=list)
 
@@ -104,4 +168,4 @@ class ValidationReport(BaseModel):
     invalid_files: int
     html_files: int
     json_files: int
-    results: list[FileValidationResult] = []
+    results: list[FileValidationResult] = Field(default_factory=list)

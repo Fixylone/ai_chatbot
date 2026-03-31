@@ -14,6 +14,7 @@ from chatbot.core.models import SectionOutput, TableOfContents
 
 etree = cast(Any, _etree)
 _HTML_TAG_PATTERN = re.compile(r"<\s*[a-zA-Z][^>]*>")
+_COMPANY_PLACEHOLDER_PATTERN = re.compile(r"\[\s*company\s*name\s*\]", re.IGNORECASE)
 
 
 def _slugify(value: str) -> str:
@@ -79,9 +80,24 @@ def validate_html_document(content: str) -> list[str]:
 
 
 def is_valid_html_fragment(content: str) -> bool:
-    """Check whether content is an HTML fragment and parseable when wrapped."""
+    """Check whether content is an HTML fragment parseable when wrapped.
+
+    This lightweight gate is intentionally more tolerant than final output
+    validation, which runs on full assembled documents.
+    """
     if not _HTML_TAG_PATTERN.search(content):
         return False
 
     wrapped = f"<!DOCTYPE html><html><body>{content}</body></html>"
-    return not validate_html_document(wrapped)
+    parser = etree.HTMLParser(recover=True)
+    try:
+        etree.fromstring(wrapped.encode("utf-8"), parser=parser)
+    except etree.XMLSyntaxError:
+        return False
+
+    return True
+
+
+def contains_unresolved_company_placeholder(content: str) -> bool:
+    """Detect unresolved company-name placeholders in generated HTML."""
+    return _COMPANY_PLACEHOLDER_PATTERN.search(content) is not None
