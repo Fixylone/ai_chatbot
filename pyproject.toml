@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "chatbot"
 version = "0.1.0"
-description = "An advanced semantic search AI chatbot for software whitelisting teams."
+description = "Synthetic legal-document generator for AI training data (Phase 1)."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

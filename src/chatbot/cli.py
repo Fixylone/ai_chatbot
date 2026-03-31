@@ -59,25 +59,9 @@ def generate(
         None,
         help="Maximum retry backoff seconds for 429 handling.",
     ),
-    runtime_feedback: bool | None = typer.Option(
+    section_delay_seconds: float | None = typer.Option(
         None,
-        help="Enable live runtime feedback while generation is running.",
-    ),
-    prompt_caching_enabled: bool | None = typer.Option(
-        None,
-        help="Enable provider prompt caching request parameters.",
-    ),
-    prompt_cache_retention: str | None = typer.Option(
-        None,
-        help="Prompt cache retention policy: in_memory or 24h.",
-    ),
-    prompt_cache_key_namespace: str | None = typer.Option(
-        None,
-        help="Namespace used when building prompt cache keys.",
-    ),
-    section_summary_max_sections: int | None = typer.Option(
-        None,
-        help="Max previous sections summarized in compressed context.",
+        help="Seconds to pause between section calls for TPM pacing.",
     ),
     section_summary_max_chars: int | None = typer.Option(
         None,
@@ -108,11 +92,7 @@ def generate(
         rate_limit_max_retries=rate_limit_max_retries,
         rate_limit_base_backoff_seconds=rate_limit_base_backoff_seconds,
         rate_limit_max_backoff_seconds=rate_limit_max_backoff_seconds,
-        runtime_feedback=runtime_feedback,
-        prompt_caching_enabled=prompt_caching_enabled,
-        prompt_cache_retention=prompt_cache_retention,
-        prompt_cache_key_namespace=prompt_cache_key_namespace,
-        section_summary_max_sections=section_summary_max_sections,
+        section_delay_seconds=section_delay_seconds,
         section_summary_max_chars=section_summary_max_chars,
         section_last_section_max_chars=section_last_section_max_chars,
         output_dir=output_dir,

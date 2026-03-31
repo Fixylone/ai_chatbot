@@ -27,16 +27,12 @@ document_types:
 rate_limit_max_retries: 3
 rate_limit_base_backoff_seconds: 2.0
 rate_limit_max_backoff_seconds: 60.0
-runtime_feedback: true
 
-# Optional prompt caching controls
-prompt_caching_enabled: false
-prompt_cache_retention: "in_memory"
-prompt_cache_key_namespace: "chatbot"
+# Pause between section LLM calls (TPM pacing)
+section_delay_seconds: 2.0
 
 # Section context compression controls
-section_summary_max_sections: 8
-section_summary_max_chars: 1600
+section_summary_max_chars: 6000
 section_last_section_max_chars: 5000
 
 # Output directory (relative to project root)

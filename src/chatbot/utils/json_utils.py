@@ -4,28 +4,20 @@ from __future__ import annotations
 
 import asyncio
 import json
-import re
 from pathlib import Path
 from typing import Any
 
-_SLUG_NON_ALNUM_PATTERN = re.compile(r"[^a-z0-9]+")
-
-
-def _slugify(value: str) -> str:
-    """Convert free text to deterministic snake-case slug."""
-    lowered = value.lower().strip().replace("&", " and ")
-    collapsed = _SLUG_NON_ALNUM_PATTERN.sub("_", lowered)
-    return collapsed.strip("_")
+from chatbot.utils import slugify
 
 
 def build_toc_json_filename(document_type: str) -> str:
     """Build TOC JSON filename for one document type."""
-    return f"toc_{_slugify(document_type)}.json"
+    return f"toc_{slugify(document_type)}.json"
 
 
 def build_issue_manifest_filename(document_type: str) -> str:
     """Build per-document issues manifest filename."""
-    return f"issues_{_slugify(document_type)}.json"
+    return f"issues_{slugify(document_type)}.json"
 
 
 async def write_json_file(path: Path, payload: dict[str, Any]) -> None:

@@ -11,22 +11,16 @@ from typing import Any, cast
 from lxml import etree as _etree  # type: ignore[import-untyped]
 
 from chatbot.core.models import SectionOutput, TableOfContents
+from chatbot.utils import slugify
 
 etree = cast(Any, _etree)
 _HTML_TAG_PATTERN = re.compile(r"<\s*[a-zA-Z][^>]*>")
 _COMPANY_PLACEHOLDER_PATTERN = re.compile(r"\[\s*company\s*name\s*\]", re.IGNORECASE)
 
 
-def _slugify(value: str) -> str:
-    """Convert free text to deterministic snake-case slug."""
-    lowered = value.lower().strip().replace("&", " and ")
-    collapsed = re.sub(r"[^a-z0-9]+", "_", lowered)
-    return collapsed.strip("_")
-
-
 def build_html_filename(document_type: str) -> str:
     """Convert document type into deterministic HTML filename."""
-    return f"{_slugify(document_type)}.html"
+    return f"{slugify(document_type)}.html"
 
 
 def assemble_document_html(

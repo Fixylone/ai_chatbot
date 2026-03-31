@@ -1,10 +1,4 @@
-"""Pydantic v2 models for structured LLM input and output.
-
-These models serve two purposes:
-    - mirascope ``format`` targets — the LLM is forced to return JSON
-      matching these schemas (via OpenAI structured outputs).
-    - Internal data transfer objects between pipeline stages.
-"""
+"""Pydantic v2 models for structured LLM output and pipeline data transfer."""
 
 from pydantic import BaseModel, Field
 
@@ -12,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class ToolDescription(BaseModel):
-    """A single fictional software tool invented by the LLM."""
+    """A fictional software tool with assigned document types."""
 
     name: str = Field(description="Product name (e.g. 'VaultSync')")
     purpose: str = Field(description="One-sentence purpose statement")
@@ -20,21 +14,7 @@ class ToolDescription(BaseModel):
     typical_user_base: str = Field(
         description="Target audience (e.g. 'Enterprise IT admins')"
     )
-    assigned_doc_types: list[str] = Field(
-        default_factory=list,
-        description="Document types assigned post-ideation",
-    )
-
-
-class ToolIdea(BaseModel):
-    """LLM-only tool payload produced by the ideation stage."""
-
-    name: str = Field(description="Product name (e.g. 'VaultSync')")
-    purpose: str = Field(description="One-sentence purpose statement")
-    category: str = Field(description="Industry vertical (e.g. FinTech)")
-    typical_user_base: str = Field(
-        description="Target audience (e.g. 'Enterprise IT admins')"
-    )
+    assigned_doc_types: list[str] = Field(default_factory=list)
 
 
 class IdeationResult(BaseModel):
@@ -43,10 +23,10 @@ class IdeationResult(BaseModel):
     tools: list[ToolDescription]
 
 
-class IdeationLLMResult(BaseModel):
+class IdeationResponse(BaseModel):
     """Strict schema used only for ideation structured output."""
 
-    tools: list[ToolIdea]
+    tools: list[ToolDescription]
 
 
 # -- Table of Contents -----------------------------------------------
@@ -76,41 +56,36 @@ class TableOfContents(BaseModel):
     sections: list[TOCEntry]
 
 
-class TOCEntryLLM(BaseModel):
+class TOCEntryResponse(BaseModel):
     """LLM-only TOC node schema with explicit required fields."""
 
     id: str = Field(description="Section identifier (e.g. '2.1.3')")
     title: str = Field(description="Section heading text")
-    children: list["TOCEntryLLM"] = Field(  # pyright: ignore[reportUnknownVariableType]
+    children: list["TOCEntryResponse"] = Field(  # pyright: ignore[reportUnknownVariableType]
         description="Nested sub-sections; use [] when leaf"
     )
 
 
-TOCEntryLLM.model_rebuild()
+TOCEntryResponse.model_rebuild()
 
 
-class TableOfContentsLLM(BaseModel):
+class TOCResponse(BaseModel):
     """Strict schema used only for TOC structured output."""
 
-    sections: list[TOCEntryLLM]
+    sections: list[TOCEntryResponse]
 
 
 # -- Section Generation ----------------------------------------------
 
 class SectionOutput(BaseModel):
-    """LLM output for a single document section."""
+    """Internal representation of a generated HTML section."""
 
-    section_id: str = Field(description="Matches TOCEntry.id")
-    html_content: str = Field(
-        description="Generated HTML fragment for this section"
-    )
-    issues_applied: list[str] = Field(
-        default_factory=list,
-        description="Data quality issues injected in this section",
-    )
+    section_id: str
+    html_content: str
+    issues_applied: list[str] = Field(default_factory=list)
 
 
-class SectionLLMOutput(BaseModel):
+class SectionResponse(BaseModel):
     """Strict schema used only for section structured output."""
 
     html_content: str = Field(
@@ -122,15 +97,11 @@ class SectionLLMOutput(BaseModel):
 
 
 class SectionIssueManifestEntry(BaseModel):
-    """Issue manifest entry for one generated section."""
-
     section_id: str
     issues_applied: list[str] = Field(default_factory=list)
 
 
 class DocumentIssueManifest(BaseModel):
-    """Per-document issue manifest artifact."""
-
     tool_name: str
     document_type: str
     total_issues: int
@@ -139,9 +110,8 @@ class DocumentIssueManifest(BaseModel):
 
 # -- Pipeline metadata -------------------------------------------------------
 
-class DocumentRecord(BaseModel):
-    """Tracks a generated document for reporting / validation."""
 
+class DocumentRecord(BaseModel):
     tool_name: str
     document_type: str
     html_path: str
@@ -152,8 +122,6 @@ class DocumentRecord(BaseModel):
 
 
 class FileValidationResult(BaseModel):
-    """Validation status for one file."""
-
     path: str
     file_type: str
     is_valid: bool
@@ -168,4 +136,4 @@ class ValidationReport(BaseModel):
     invalid_files: int
     html_files: int
     json_files: int
-    results: list[FileValidationResult] = Field(default_factory=list)
+    results: list[FileValidationResult] = []
