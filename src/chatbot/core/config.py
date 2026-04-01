@@ -36,7 +36,7 @@ class GenerationConfig(BaseSettings):
 
     # LLM model identifiers
     toc_model: str = Field(default="openai/l2-gpt-4.1-mini", min_length=1)
-    section_model: str = Field(default="openai/l2-gpt-4o-mini", min_length=1)
+    section_model: str = Field(default="openai/l2-gpt-4.1-nano", min_length=1)
     ideation_model: str = Field(default="openai/l2-gpt-4.1-nano", min_length=1)
 
     # Sampling
@@ -57,8 +57,11 @@ class GenerationConfig(BaseSettings):
     rate_limit_base_backoff_seconds: float = Field(default=2.0, ge=0.1, le=120.0)
     rate_limit_max_backoff_seconds: float = Field(default=60.0, ge=1.0, le=600.0)
 
-    # TPM pacing — delay between section generation calls (seconds)
-    section_delay_seconds: float = Field(default=2.0, ge=0.0, le=30.0)
+    # RPM pacing — adaptive delay keeps request rate under this limit
+    rpm_limit: int = Field(default=60, ge=1, le=600)
+    # Minimum floor delay between section calls (seconds); adaptive pacer
+    # may add more to stay within rpm_limit.
+    section_delay_seconds: float = Field(default=0.0, ge=0.0, le=30.0)
 
     # Section context compression
     section_summary_max_chars: int = Field(default=6000, ge=200, le=20000)

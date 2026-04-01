@@ -23,10 +23,21 @@ class IdeationResult(BaseModel):
     tools: list[ToolDescription]
 
 
+class ToolIdeaResponse(BaseModel):
+    """LLM-only tool description — no optional/defaulted fields."""
+
+    name: str = Field(description="Product name (e.g. 'VaultSync')")
+    purpose: str = Field(description="One-sentence purpose statement")
+    category: str = Field(description="Industry vertical (e.g. FinTech)")
+    typical_user_base: str = Field(
+        description="Target audience (e.g. 'Enterprise IT admins')"
+    )
+
+
 class IdeationResponse(BaseModel):
     """Strict schema used only for ideation structured output."""
 
-    tools: list[ToolDescription]
+    tools: list[ToolIdeaResponse]
 
 
 # -- Table of Contents -----------------------------------------------

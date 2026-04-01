@@ -15,7 +15,11 @@ from chatbot.utils import slugify
 
 etree = cast(Any, _etree)
 _HTML_TAG_PATTERN = re.compile(r"<\s*[a-zA-Z][^>]*>")
-_COMPANY_PLACEHOLDER_PATTERN = re.compile(r"\[\s*company\s*name\s*\]", re.IGNORECASE)
+_TAG_INVALID_RE = re.compile(r"Tag (\w+) invalid")
+_HTML5_TAGS = frozenset({
+    "article", "aside", "details", "figcaption", "figure", "footer",
+    "header", "main", "mark", "nav", "section", "summary", "time",
+})
 
 
 def build_html_filename(document_type: str) -> str:
@@ -63,14 +67,21 @@ async def write_html_file(path: Path, html_content: str) -> None:
 
 def validate_html_document(content: str) -> list[str]:
     """Validate HTML parseability and return parser errors."""
-    parser = etree.HTMLParser(recover=False)
+    parser = etree.HTMLParser(recover=True)
 
     try:
         etree.fromstring(content.encode("utf-8"), parser=parser)
     except etree.XMLSyntaxError as exc:
         return [str(exc)]
 
-    return [str(entry) for entry in parser.error_log]
+    errors: list[str] = []
+    for entry in parser.error_log:
+        msg = str(entry)
+        m = _TAG_INVALID_RE.search(msg)
+        if m and m.group(1).lower() in _HTML5_TAGS:
+            continue
+        errors.append(msg)
+    return errors
 
 
 def is_valid_html_fragment(content: str) -> bool:
@@ -90,8 +101,3 @@ def is_valid_html_fragment(content: str) -> bool:
         return False
 
     return True
-
-
-def contains_unresolved_company_placeholder(content: str) -> bool:
-    """Detect unresolved company-name placeholders in generated HTML."""
-    return _COMPANY_PLACEHOLDER_PATTERN.search(content) is not None

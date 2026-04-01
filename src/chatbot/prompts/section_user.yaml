@@ -11,18 +11,12 @@ template: |
   Full TOC JSON:
   {toc_json}
 
-  Quality controls for this document:
-  - Required total injected issues across the full document: {target_issue_range}
-  - Target total issue count for this document: {target_issue_total}
-  - Required issue count for this section: {required_issue_count}
-  - Required issue label for this section: {required_issue_label}
-  - Allowed issue labels are exactly:
-    - contradictory_clause
-    - ambiguous_language
-    - minor_typo_or_formatting
-    - inconsistent_terminology_or_cross_reference
-  - If required issue count is 0, return issues_applied as [] and do not inject a new issue.
-  - If required issue count is 1, return issues_applied exactly as ["{required_issue_label}"].
+  Issue injection for this section:
+  - Inject issue: {inject_issue}
+  - Issue label: {required_issue_label}
+  - If inject issue is "no", return issues_applied as [] and do not inject any issue.
+  - If inject issue is "yes", inject exactly one data-quality issue of the specified label into the section HTML and return issues_applied as ["{required_issue_label}"].
+  - Allowed issue labels: contradictory_clause, ambiguous_language, minor_typo_or_formatting, inconsistent_terminology_or_cross_reference.
   - Use the actual tool name "{tool_name}" in prose; do not output placeholders such as [CompanyName] or [Company Name].
   - Keep this section substantial (typically 2-4 paragraphs unless naturally shorter).
 

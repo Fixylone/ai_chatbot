@@ -62,7 +62,15 @@ async def generate_tool_ideation(config: GenerationConfig) -> IdeationResult:
     )
     parsed = cast(IdeationResponse, response.parse())  # type: ignore[attr-defined]
 
-    tools = list(parsed.tools)
+    tools = [
+        ToolDescription(
+            name=t.name,
+            purpose=t.purpose,
+            category=t.category,
+            typical_user_base=t.typical_user_base,
+        )
+        for t in parsed.tools
+    ]
     _assign_document_types(tools, config.document_types, config.docs_per_tool)
 
     return IdeationResult(tools=tools)

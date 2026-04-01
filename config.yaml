@@ -3,7 +3,7 @@
 
 # LLM models (IDs supported by your gateway)
 toc_model: "openai/l2-gpt-4.1-mini" # TOC generation (reasoning-focused)
-section_model: "openai/l2-gpt-4o-mini" # Section content (cost-effective)
+section_model: "openai/l2-gpt-4.1-nano" # Section content (cost-effective)
 ideation_model: "openai/l2-gpt-4.1-nano" # Tool ideation (creative)
 
 # Sampling
@@ -28,8 +28,10 @@ rate_limit_max_retries: 3
 rate_limit_base_backoff_seconds: 2.0
 rate_limit_max_backoff_seconds: 60.0
 
-# Pause between section LLM calls (TPM pacing)
-section_delay_seconds: 2.0
+# Adaptive RPM pacing — requests per minute limit
+rpm_limit: 60
+# Minimum floor delay between section calls (adaptive pacer adds more if needed)
+section_delay_seconds: 0.0
 
 # Section context compression controls
 section_summary_max_chars: 6000

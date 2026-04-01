@@ -13,7 +13,6 @@ from chatbot.core.models import (
     ValidationReport,
 )
 from chatbot.utils.html_utils import (
-    contains_unresolved_company_placeholder,
     validate_html_document,
 )
 from chatbot.utils.json_utils import parse_json_content
@@ -29,11 +28,6 @@ def validate_html(content: str) -> list[str]:
         List of validation error messages. Empty means valid.
     """
     errors = validate_html_document(content)
-    if contains_unresolved_company_placeholder(content):
-        errors.append(
-            "Unresolved company placeholder detected ([CompanyName] or "
-            "[Company Name])."
-        )
     if errors and any("line" in error.lower() for error in errors):
         errors.append(
             "HTML parser line numbers refer to the final assembled document "

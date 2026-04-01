@@ -5,8 +5,9 @@ template: |
 
   Constraints:
   - Return valid HTML fragments for a single section.
-  - Do not return plain text; html_content must contain HTML tags.
+  - Do not return plain text; html_content must contain valid HTML tags.
   - Always include issues_applied as a JSON array (empty array when no issue).
+  - Never repeat previous sections
   - Preserve coherence with prior sections and overall document flow.
   - Keep sections substantive; avoid very short generic text.
   - Use real-world legal writing density similar to SLA and policy documents.

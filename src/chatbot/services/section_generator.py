@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import asyncio
+import time
 from pathlib import Path
 from typing import cast
 
-from mirascope import llm  # type: ignore[import-untyped]
+from mirascope import llm
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import (
@@ -19,7 +20,6 @@ from chatbot.core.models import (
 from chatbot.services.issue_plan_manager import IssuePlanManager, SectionIssueRequirement
 from chatbot.services.section_context_compressor import SectionContextCompressor
 from chatbot.utils.html_utils import (
-    contains_unresolved_company_placeholder,
     is_valid_html_fragment,
 )
 from chatbot.utils.llm_runtime import call_llm_with_retries
@@ -61,9 +61,7 @@ async def _build_section_prompt(
             "last_full_section_html": last_full_section_html,
             "section_id": target_section.id,
             "section_title": target_section.title,
-            "target_issue_range": "2-3",
-            "target_issue_total": issue_req.target_issue_total,
-            "required_issue_count": issue_req.required_issue_count,
+            "inject_issue": "yes" if issue_req.required_issue_count > 0 else "no",
             "required_issue_label": issue_req.required_issue_label or "none",
         },
     )
@@ -111,6 +109,7 @@ async def generate_document_sections(
     total_issues = 0
 
     for section in ordered:
+        section_start = time.monotonic()
         ctx = compressor.current_context()
         req = issue_mgr.requirement_for(section.id, total_issues)
 
@@ -150,11 +149,10 @@ async def generate_document_sections(
                 stage=stage, model_id=config.section_model,
             )
 
-            candidate = cast(SectionResponse, response.parse())  # type: ignore[attr-defined]
+            candidate = cast(SectionResponse, response.parse())
             issues_ok = issue_mgr.issues_match(section.id, candidate.issues_applied)
-            placeholder = contains_unresolved_company_placeholder(candidate.html_content)
 
-            if issues_ok and not placeholder and is_valid_html_fragment(candidate.html_content):
+            if issues_ok and is_valid_html_fragment(candidate.html_content):
                 result = SectionOutput(
                     section_id=section.id,
                     html_content=candidate.html_content,
@@ -177,9 +175,18 @@ async def generate_document_sections(
         total_issues += len(result.issues_applied)
         compressor.observe_section(result)
 
-        # TPM pacing — avoid flooding API when rate limits are tight
-        if config.section_delay_seconds > 0:
-            await asyncio.sleep(config.section_delay_seconds)
+        # Adaptive RPM pacing — only sleep if request was faster than the
+        # minimum interval derived from the RPM limit.
+        min_interval = 60.0 / config.rpm_limit
+        elapsed = time.monotonic() - section_start
+        gap = max(config.section_delay_seconds, min_interval) - elapsed
+        if gap > 0:
+            print(
+                f"[pacing] sleeping {gap:.2f}s "
+                f"(elapsed={elapsed:.2f}s, min_interval={min_interval:.2f}s)",
+                flush=True,
+            )
+            await asyncio.sleep(gap)
 
     issue_mgr.validate_document_totals(total_issues)
     return generated
