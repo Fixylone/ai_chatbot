@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class ToolDescription(BaseModel):
-    """A fictional software tool with assigned document types."""
+    """Software tool with assigned document types."""
 
     name: str = Field(description="Product name (e.g. 'VaultSync')")
     purpose: str = Field(description="One-sentence purpose statement")
@@ -24,7 +24,7 @@ class IdeationResult(BaseModel):
 
 
 class ToolIdeaResponse(BaseModel):
-    """LLM-only tool description — no optional/defaulted fields."""
+    """LLM-only tool description schema with explicit required fields."""
 
     name: str = Field(description="Product name (e.g. 'VaultSync')")
     purpose: str = Field(description="One-sentence purpose statement")
@@ -43,14 +43,11 @@ class IdeationResponse(BaseModel):
 # -- Table of Contents -----------------------------------------------
 
 class TOCEntry(BaseModel):
-    """A single node in the document outline (recursive).
-
-    Supports arbitrary nesting depth — not hard-coded to 2 levels.
-    """
+    """A single node in the document outline. Supports arbitrary nesting depth — not hard-coded to 2 levels."""
 
     id: str = Field(description="Section identifier (e.g. '2.1.3')")
     title: str = Field(description="Section heading text")
-    children: list["TOCEntry"] = Field(  # pyright: ignore[reportUnknownVariableType]
+    children: list["TOCEntry"] = Field(
         default_factory=list,
         description="Nested sub-sections",
     )
@@ -72,7 +69,7 @@ class TOCEntryResponse(BaseModel):
 
     id: str = Field(description="Section identifier (e.g. '2.1.3')")
     title: str = Field(description="Section heading text")
-    children: list["TOCEntryResponse"] = Field(  # pyright: ignore[reportUnknownVariableType]
+    children: list["TOCEntryResponse"] = Field(
         description="Nested sub-sections; use [] when leaf"
     )
 

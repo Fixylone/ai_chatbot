@@ -35,8 +35,8 @@ class GenerationConfig(BaseSettings):
     )
 
     # LLM model identifiers
-    toc_model: str = Field(default="openai/l2-gpt-4.1-mini", min_length=1)
-    section_model: str = Field(default="openai/l2-gpt-4.1-nano", min_length=1)
+    toc_model: str = Field(default="openai/l2-gpt-4.1-nano", min_length=1)
+    section_model: str = Field(default="openai/l2-gpt-4.1-mini", min_length=1)
     ideation_model: str = Field(default="openai/l2-gpt-4.1-nano", min_length=1)
 
     # Sampling

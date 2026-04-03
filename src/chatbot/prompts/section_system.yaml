@@ -19,3 +19,10 @@ template: |
     contradictory_clause, ambiguous_language,
     minor_typo_or_formatting, inconsistent_terminology_or_cross_reference.
   - Report applied issues in the structured field.
+
+  Heading hierarchy rules:
+  - Top-level sections (e.g. id "1") use <h2> with a numbered prefix (e.g. "1. Introduction").
+  - Second-level sections (e.g. id "1.1") use <h3> with a numbered prefix (e.g. "1.1 Definitions").
+  - Third-level sections (e.g. id "1.1.1") use <h4> with a numbered prefix.
+  - Indent nested content within <section> tags to reflect structure.
+  - Do not use <h1>; it is reserved for the document title.

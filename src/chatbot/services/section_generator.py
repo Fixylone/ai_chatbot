@@ -26,7 +26,7 @@ from chatbot.utils.llm_runtime import call_llm_with_retries
 from chatbot.utils.prompt_loader import render_prompt
 
 _PROMPTS_DIR = Path(__file__).resolve().parents[1] / "prompts"
-_MAX_SECTION_ATTEMPTS = 3
+_MAX_SECTION_ATTEMPTS = 5
 
 
 def _flatten_toc(entries: list[TOCEntry]) -> list[TOCEntry]:

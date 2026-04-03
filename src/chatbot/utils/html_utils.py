@@ -8,14 +8,14 @@ from html import escape
 from pathlib import Path
 from typing import Any, cast
 
-from lxml import etree as _etree  # type: ignore[import-untyped]
+from lxml import etree as _etree
 
 from chatbot.core.models import SectionOutput, TableOfContents
-from chatbot.utils import slugify
+from chatbot.utils import to_snake_case
 
 etree = cast(Any, _etree)
 _HTML_TAG_PATTERN = re.compile(r"<\s*[a-zA-Z][^>]*>")
-_TAG_INVALID_RE = re.compile(r"Tag (\w+) invalid")
+_TAG_INVALID_PATTERN = re.compile(r"Tag (\w+) invalid")
 _HTML5_TAGS = frozenset({
     "article", "aside", "details", "figcaption", "figure", "footer",
     "header", "main", "mark", "nav", "section", "summary", "time",
@@ -24,7 +24,7 @@ _HTML5_TAGS = frozenset({
 
 def build_html_filename(document_type: str) -> str:
     """Convert document type into deterministic HTML filename."""
-    return f"{slugify(document_type)}.html"
+    return f"{to_snake_case(document_type)}.html"
 
 
 def assemble_document_html(
@@ -77,7 +77,7 @@ def validate_html_document(content: str) -> list[str]:
     errors: list[str] = []
     for entry in parser.error_log:
         msg = str(entry)
-        m = _TAG_INVALID_RE.search(msg)
+        m = _TAG_INVALID_PATTERN.search(msg)
         if m and m.group(1).lower() in _HTML5_TAGS:
             continue
         errors.append(msg)

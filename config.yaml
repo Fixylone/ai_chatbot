@@ -2,8 +2,8 @@
 # Override with env vars (CHATBOT_* prefix) or CLI flags.
 
 # LLM models (IDs supported by your gateway)
-toc_model: "openai/l2-gpt-4.1-mini" # TOC generation (reasoning-focused)
-section_model: "openai/l2-gpt-4.1-nano" # Section content (cost-effective)
+toc_model: "openai/l2-gpt-4.1-nano" # TOC generation (reasoning-focused)
+section_model: "openai/l2-gpt-4.1-mini" # Section content (cost-effective)
 ideation_model: "openai/l2-gpt-4.1-nano" # Tool ideation (creative)
 
 # Sampling

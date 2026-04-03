@@ -5,8 +5,8 @@ import re
 _SLUG_PATTERN = re.compile(r"[^a-z0-9]+")
 
 
-def slugify(value: str) -> str:
-    """Convert free text to a deterministic snake_case slug."""
+def to_snake_case(value: str) -> str:
+    """Convert free text to a deterministic snake_case identifier."""
     lowered = value.lower().strip().replace("&", " and ")
     collapsed = _SLUG_PATTERN.sub("_", lowered)
     return collapsed.strip("_")

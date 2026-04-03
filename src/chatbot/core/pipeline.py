@@ -14,7 +14,7 @@ from chatbot.core.models import (
 from chatbot.services.ideation import generate_tool_ideation
 from chatbot.services.section_generator import generate_document_sections
 from chatbot.services.toc_generator import generate_table_of_contents
-from chatbot.utils import slugify
+from chatbot.utils import to_snake_case
 from chatbot.utils.html_utils import (
     assemble_document_html,
     build_html_filename,
@@ -41,6 +41,26 @@ async def _generate_single_document(
     document_type: str,
 ) -> DocumentRecord:
     """Generate and persist one document (TOC JSON + HTML + issues manifest)."""
+    tool_dir = config.output_dir / to_snake_case(tool.name)
+    toc_path = tool_dir / build_toc_json_filename(document_type)
+    html_path = tool_dir / build_html_filename(document_type)
+
+    if html_path.exists():
+        print(
+            f"[pipeline] skipping {document_type} for {tool.name} — "
+            f"already exists at {html_path}",
+            flush=True,
+        )
+        return DocumentRecord(
+            tool_name=tool.name,
+            document_type=document_type,
+            html_path=str(html_path),
+            toc_path=str(toc_path),
+            issues_manifest_path=str(tool_dir / build_issue_manifest_filename(document_type)),
+            total_sections=0,
+            issues_summary=[],
+        )
+
     toc_temp = _jittered(config.toc_temperature)
     section_temp = _jittered(config.section_temperature)
 
@@ -51,9 +71,6 @@ async def _generate_single_document(
         config, tool, toc, temperature=section_temp,
     )
 
-    tool_dir = config.output_dir / slugify(tool.name)
-    toc_path = tool_dir / build_toc_json_filename(document_type)
-    html_path = tool_dir / build_html_filename(document_type)
     issues_path = tool_dir / build_issue_manifest_filename(document_type)
 
     await write_json_file(toc_path, toc.model_dump())

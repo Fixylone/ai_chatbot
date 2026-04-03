@@ -6,7 +6,7 @@ import random
 from pathlib import Path
 from typing import cast
 
-from mirascope import llm  # type: ignore[import-untyped]
+from mirascope import llm
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import IdeationResponse, IdeationResult, ToolDescription
@@ -60,7 +60,7 @@ async def generate_tool_ideation(config: GenerationConfig) -> IdeationResult:
         stage="ideation",
         model_id=config.ideation_model,
     )
-    parsed = cast(IdeationResponse, response.parse())  # type: ignore[attr-defined]
+    parsed = cast(IdeationResponse, response.parse())
 
     tools = [
         ToolDescription(

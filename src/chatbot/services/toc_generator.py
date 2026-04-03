@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import cast
 
-from mirascope import llm  # type: ignore[import-untyped]
+from mirascope import llm 
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import (
@@ -91,10 +91,10 @@ async def generate_table_of_contents(
             stage=f"toc:{document_type}:attempt-{attempt}",
             model_id=config.toc_model,
         )
-        candidate = cast(TOCResponse, response.parse())  # type: ignore[attr-defined]
+        candidate = cast(TOCResponse, response.parse())
         mapped = [_map_entry(e) for e in candidate.sections]
 
-        if _max_depth(mapped) >= 3:
+        if _max_depth(mapped) >= 2:
             toc_sections = mapped
             break
 

@@ -11,9 +11,9 @@ from dataclasses import dataclass
 
 from chatbot.core.models import SectionOutput
 
-_TAG_RE = re.compile(r"<[^>]+>")
-_WS_RE = re.compile(r"\s+")
-_HEADING_RE = re.compile(r"<h[1-6][^>]*>(.*?)</h[1-6]>", re.IGNORECASE | re.DOTALL)
+_HTML_TAG_PATTERN = re.compile(r"<[^>]+>")
+_WHITESPACE_PATTERN = re.compile(r"\s+")
+_HEADING_PATTERN = re.compile(r"<h[1-6][^>]*>(.*?)</h[1-6]>", re.IGNORECASE | re.DOTALL)
 
 
 @dataclass(frozen=True)
@@ -69,11 +69,11 @@ class SectionContextCompressor:
         return f"- {section.section_id}: {heading}"
 
     def _extract_heading(self, html: str) -> str:
-        match = _HEADING_RE.search(html)
+        match = _HEADING_PATTERN.search(html)
         if not match:
             return ""
         return self._strip_tags(match.group(1))[:120].strip()
 
     @staticmethod
     def _strip_tags(html: str) -> str:
-        return _WS_RE.sub(" ", _TAG_RE.sub(" ", html)).strip()
+        return _WHITESPACE_PATTERN.sub(" ", _HTML_TAG_PATTERN.sub(" ", html)).strip()

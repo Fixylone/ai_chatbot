@@ -78,7 +78,7 @@ def generate(
         help="Repeat option to override document type pool.",
     ),
 ) -> None:
-    """Generate full synthetic dataset for Phase 1."""
+    """Generate dataset for Phase 1."""
     overrides = _merge_overrides(
         toc_model=toc_model,
         section_model=section_model,

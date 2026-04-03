@@ -7,17 +7,17 @@ import json
 from pathlib import Path
 from typing import Any
 
-from chatbot.utils import slugify
+from chatbot.utils import to_snake_case
 
 
 def build_toc_json_filename(document_type: str) -> str:
     """Build TOC JSON filename for one document type."""
-    return f"toc_{slugify(document_type)}.json"
+    return f"toc_{to_snake_case(document_type)}.json"
 
 
 def build_issue_manifest_filename(document_type: str) -> str:
     """Build per-document issues manifest filename."""
-    return f"issues_{slugify(document_type)}.json"
+    return f"issues_{to_snake_case(document_type)}.json"
 
 
 async def write_json_file(path: Path, payload: dict[str, Any]) -> None:

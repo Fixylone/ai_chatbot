@@ -9,4 +9,4 @@ template: |
   - Keep tool descriptions concise but specific enough to drive legal document generation.
   - Each tool should be plausible for enterprise use.
   - Avoid marketing fluff.
-  - Each product name MUST use a unique naming style. Vary the structure (compound words, acronyms, single words, portmanteaus, etc.) and avoid repeating suffixes or prefixes across names.
+  - Each product name MUST use a unique naming style. Vary the structure (compound words, acronyms, single words, etc.) and avoid repeating suffixes or prefixes across names.
