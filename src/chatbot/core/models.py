@@ -91,22 +91,37 @@ class SectionOutput(BaseModel):
     section_id: str
     html_content: str
     issues_applied: list[str] = Field(default_factory=list)
+    issue_sentence: str = "none"
 
 
 class SectionResponse(BaseModel):
-    """Strict schema used only for section structured output."""
+    """Strict schema used only for section structured output.
 
-    html_content: str = Field(
-        description="Generated HTML fragment for this section"
-    )
+    Field order matters: issues_applied and issue_sentence are generated
+    before html_content so the model commits to the defect first.
+    """
+
     issues_applied: list[str] = Field(
         description="Data quality issues injected in this section"
+    )
+    issue_sentence: str = Field(
+        description=(
+            "The exact sentence — including any intentional defect — that will "
+            "appear verbatim in html_content; use 'none' when issues_applied is []."
+        )
+    )
+    html_content: str = Field(
+        description=(
+            "Generated HTML fragment for this section; must include "
+            "issue_sentence verbatim when an issue is injected"
+        )
     )
 
 
 class SectionIssueManifestEntry(BaseModel):
     section_id: str
     issues_applied: list[str] = Field(default_factory=list)
+    issue_sentence: str = "none"
 
 
 class DocumentIssueManifest(BaseModel):
@@ -126,6 +141,7 @@ class DocumentRecord(BaseModel):
     toc_path: str
     issues_manifest_path: str
     total_sections: int
+    generation_time_seconds: float = 0.0
     issues_summary: list[str] = Field(default_factory=list)
 
 

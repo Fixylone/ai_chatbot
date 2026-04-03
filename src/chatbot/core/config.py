@@ -63,9 +63,9 @@ class GenerationConfig(BaseSettings):
     # may add more to stay within rpm_limit.
     section_delay_seconds: float = Field(default=0.0, ge=0.0, le=30.0)
 
-    # Section context compression
-    section_summary_max_chars: int = Field(default=6000, ge=200, le=20000)
-    section_last_section_max_chars: int = Field(default=5000, ge=500, le=20000)
+    # Content-validation retry limits (separate from API-error retries)
+    section_max_validation_retries: int = Field(default=5, ge=1, le=20)
+    toc_max_validation_retries: int = Field(default=3, ge=1, le=20)
 
     # Output
     output_dir: Path = Field(default=Path("data"))

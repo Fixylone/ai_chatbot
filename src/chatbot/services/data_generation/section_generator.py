@@ -17,16 +17,14 @@ from chatbot.core.models import (
     TOCEntry,
     ToolDescription,
 )
-from chatbot.services.issue_plan_manager import IssuePlanManager, SectionIssueRequirement
-from chatbot.services.section_context_compressor import SectionContextCompressor
+from chatbot.services.data_generation.issue_plan_manager import IssuePlanManager, SectionIssueRequirement
 from chatbot.utils.html_utils import (
     is_valid_html_fragment,
 )
 from chatbot.utils.llm_runtime import call_llm_with_retries
 from chatbot.utils.prompt_loader import render_prompt
 
-_PROMPTS_DIR = Path(__file__).resolve().parents[1] / "prompts"
-_MAX_SECTION_ATTEMPTS = 5
+_PROMPTS_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
 
 def _flatten_toc(entries: list[TOCEntry]) -> list[TOCEntry]:
@@ -43,8 +41,7 @@ async def _build_section_prompt(
     document_type: str,
     toc_json: str,
     target_section: TOCEntry,
-    previous_sections_summary: str,
-    last_full_section_html: str,
+    previous_sections_html: str,
     issue_req: SectionIssueRequirement,
 ) -> str:
     system_prompt = await render_prompt(_PROMPTS_DIR / "section_system.yaml")
@@ -57,8 +54,7 @@ async def _build_section_prompt(
             "tool_user_base": tool.typical_user_base,
             "document_type": document_type,
             "toc_json": toc_json,
-            "previous_sections_summary": previous_sections_summary,
-            "last_full_section_html": last_full_section_html,
+            "previous_sections_html": previous_sections_html or "none",
             "section_id": target_section.id,
             "section_title": target_section.title,
             "inject_issue": "yes" if issue_req.required_issue_count > 0 else "no",
@@ -77,15 +73,11 @@ async def generate_document_sections(
 ) -> list[SectionOutput]:
     """Generate all sections for a document sequentially.
 
-    Each section receives compressed context from all prior sections
+    Each section receives the full HTML of all prior sections
     to maintain coherence across the document.
     """
     ordered = _flatten_toc(toc.sections)
     issue_mgr = IssuePlanManager(ordered)
-    compressor = SectionContextCompressor(
-        max_summary_chars=config.section_summary_max_chars,
-        max_last_section_chars=config.section_last_section_max_chars,
-    )
 
     print(
         f"[issues] target_total={issue_mgr.target_issue_total} "
@@ -107,15 +99,19 @@ async def generate_document_sections(
     toc_json = toc.model_dump_json()
     generated: list[SectionOutput] = []
     total_issues = 0
+    max_attempts = config.section_max_validation_retries
 
     for section in ordered:
         section_start = time.monotonic()
-        ctx = compressor.current_context()
+        previous_sections_html = "\n\n".join(
+            s.html_content for s in generated
+        )
         req = issue_mgr.requirement_for(section.id, total_issues)
 
         print(
             f"[issues] section={section.id} "
-            f"remaining={req.issues_remaining} required={req.required_issue_count}",
+            f"remaining={req.issues_remaining} required={req.required_issue_count} "
+            f"label={req.required_issue_label or 'none'}",
             flush=True,
         )
 
@@ -124,23 +120,28 @@ async def generate_document_sections(
             document_type=toc.document_type,
             toc_json=toc_json,
             target_section=section,
-            previous_sections_summary=ctx.previous_sections_summary,
-            last_full_section_html=ctx.last_full_section_html,
+            previous_sections_html=previous_sections_html,
             issue_req=req,
         )
 
         result: SectionOutput | None = None
 
-        for attempt in range(1, _MAX_SECTION_ATTEMPTS + 1):
+        for attempt in range(1, max_attempts + 1):
             call_prompt = prompt
             if attempt > 1:
-                call_prompt = (
-                    f"{prompt}\n\n"
-                    "Retry instruction: Return valid HTML fragment content in "
+                retry_instruction = (
+                    "Retry instruction: Return HTML fragment content in "
                     "html_content, use no unresolved placeholders like "
                     "[CompanyName] or [Company Name], and "
                     "match issues_applied exactly to required_issue_count and "
-                    "required_issue_label."
+                    "required_issue_label. Write issue_sentence BEFORE "
+                    "html_content: 'none' when no issue is required, "
+                    "otherwise compose a sentence that contains the visible "
+                    "defect, then include that sentence verbatim in html_content."
+                )
+                call_prompt = (
+                    f"{prompt}\n\n"
+                    f"{retry_instruction}"
                 )
 
             stage = f"section:{toc.document_type}:{section.id}:attempt-{attempt}"
@@ -151,12 +152,19 @@ async def generate_document_sections(
 
             candidate = cast(SectionResponse, response.parse())
             issues_ok = issue_mgr.issues_match(section.id, candidate.issues_applied)
+            sentence = candidate.issue_sentence.strip()
+            sentence_ok = False
+            if req.required_issue_count == 0:
+                sentence_ok = sentence.lower() == "none"
+            else:
+                sentence_ok = bool(sentence) and sentence.lower() != "none" and sentence in candidate.html_content
 
-            if issues_ok and is_valid_html_fragment(candidate.html_content):
+            if issues_ok and sentence_ok and is_valid_html_fragment(candidate.html_content):
                 result = SectionOutput(
                     section_id=section.id,
                     html_content=candidate.html_content,
                     issues_applied=candidate.issues_applied,
+                    issue_sentence=sentence or "none",
                 )
                 break
 
@@ -166,14 +174,12 @@ async def generate_document_sections(
                 else f'["{req.required_issue_label}"]'
             )
             raise ValueError(
-                f"Section '{section.id}' failed after {_MAX_SECTION_ATTEMPTS} "
-                f"attempts. Expected issues_applied={expected}, valid HTML, "
-                "no [CompanyName] placeholder."
+                f"Section '{section.id}' failed after {max_attempts} "
+                f"attempts. Expected issues_applied={expected}, valid HTML"
             )
 
         generated.append(result)
         total_issues += len(result.issues_applied)
-        compressor.observe_section(result)
 
         # Adaptive RPM pacing — only sleep if request was faster than the
         # minimum interval derived from the RPM limit.

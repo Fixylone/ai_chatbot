@@ -18,8 +18,7 @@ from chatbot.core.models import (
 from chatbot.utils.llm_runtime import call_llm_with_retries
 from chatbot.utils.prompt_loader import render_prompt
 
-_PROMPTS_DIR = Path(__file__).resolve().parents[1] / "prompts"
-_MAX_TOC_ATTEMPTS = 3
+_PROMPTS_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
 
 def _max_depth(sections: list[TOCEntry]) -> int:
@@ -74,9 +73,10 @@ async def generate_table_of_contents(
     def _toc_call(prompt_text: str) -> str:
         return prompt_text
 
+    max_attempts = config.toc_max_validation_retries
     toc_sections: list[TOCEntry] | None = None
 
-    for attempt in range(1, _MAX_TOC_ATTEMPTS + 1):
+    for attempt in range(1, max_attempts + 1):
         prompt = base_prompt
         if attempt > 1:
             prompt += (
@@ -101,7 +101,7 @@ async def generate_table_of_contents(
     if toc_sections is None:
         raise ValueError(
             f"TOC for '{document_type}' lacked sufficient depth "
-            f"after {_MAX_TOC_ATTEMPTS} attempts."
+            f"after {max_attempts} attempts."
         )
 
     return TableOfContents(

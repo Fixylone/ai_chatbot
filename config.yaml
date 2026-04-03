@@ -33,9 +33,9 @@ rpm_limit: 60
 # Minimum floor delay between section calls (adaptive pacer adds more if needed)
 section_delay_seconds: 0.0
 
-# Section context compression controls
-section_summary_max_chars: 6000
-section_last_section_max_chars: 5000
+# Content-validation retry limits (separate from API-error retries)
+section_max_validation_retries: 5
+toc_max_validation_retries: 3
 
 # Output directory (relative to project root)
 output_dir: "data"

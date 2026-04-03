@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+import time
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import (
@@ -11,9 +12,9 @@ from chatbot.core.models import (
     SectionIssueManifestEntry,
     ToolDescription,
 )
-from chatbot.services.ideation import generate_tool_ideation
-from chatbot.services.section_generator import generate_document_sections
-from chatbot.services.toc_generator import generate_table_of_contents
+from chatbot.services.data_generation.ideation import generate_tool_ideation
+from chatbot.services.data_generation.section_generator import generate_document_sections
+from chatbot.services.data_generation.toc_generator import generate_table_of_contents
 from chatbot.utils import to_snake_case
 from chatbot.utils.html_utils import (
     assemble_document_html,
@@ -64,11 +65,20 @@ async def _generate_single_document(
     toc_temp = _jittered(config.toc_temperature)
     section_temp = _jittered(config.section_temperature)
 
+    doc_start = time.monotonic()
+
     toc = await generate_table_of_contents(
         config, tool, document_type, temperature=toc_temp,
     )
     sections = await generate_document_sections(
         config, tool, toc, temperature=section_temp,
+    )
+
+    generation_time = time.monotonic() - doc_start
+    print(
+        f"[timing] {document_type} for {tool.name}: "
+        f"{generation_time:.1f}s",
+        flush=True,
     )
 
     issues_path = tool_dir / build_issue_manifest_filename(document_type)
@@ -84,6 +94,7 @@ async def _generate_single_document(
             SectionIssueManifestEntry(
                 section_id=s.section_id,
                 issues_applied=s.issues_applied,
+                issue_sentence=s.issue_sentence,
             )
             for s in sections
         ],
@@ -101,6 +112,7 @@ async def _generate_single_document(
         toc_path=str(toc_path),
         issues_manifest_path=str(issues_path),
         total_sections=len(sections),
+        generation_time_seconds=round(generation_time, 2),
         issues_summary=all_issues,
     )
 

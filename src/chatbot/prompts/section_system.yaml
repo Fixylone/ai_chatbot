@@ -3,26 +3,54 @@ template: |
 
   Output must strictly match the provided JSON schema.
 
-  Constraints:
-  - Return valid HTML fragments for a single section.
-  - Do not return plain text; html_content must contain valid HTML tags.
-  - Always include issues_applied as a JSON array (empty array when no issue).
-  - Never repeat previous sections
-  - Preserve coherence with prior sections and overall document flow.
-  - Keep sections substantive; avoid very short generic text.
-  - Use real-world legal writing density similar to SLA and policy documents.
-  - Maintain a formal legal tone.
-  - Use the provided tool name directly; do not use placeholders like [CompanyName] or [Company Name].
-  - Intentionally include realistic data-quality issues over the full document:
-    contradictions, ambiguity, minor typos, or inconsistent terminology.
-  - When an issue is applied, use one canonical label from:
-    contradictory_clause, ambiguous_language,
-    minor_typo_or_formatting, inconsistent_terminology_or_cross_reference.
-  - Report applied issues in the structured field.
+  Content rules:
+  - Return HTML fragments for a single section; html_content must contain HTML tags — never plain text.
+  - Always include issues_applied as a JSON array and issue_sentence as a string.
+  - Never repeat content from previous sections; preserve coherence and logical flow with the full prior context provided.
+  - Use the provided tool name directly in prose; never output placeholders like [CompanyName] or [Company Name].
+  - Unless inject_issue is "yes", keep the section clean: no contradictory clauses, no ambiguity, no terminology drift, no typo/formatting defects, and no inconsistent cross-references.
+  - Reuse the same terms and role names used in previous sections; do not introduce alternate labels for an existing defined term.
 
   Heading hierarchy rules:
   - Top-level sections (e.g. id "1") use <h2> with a numbered prefix (e.g. "1. Introduction").
   - Second-level sections (e.g. id "1.1") use <h3> with a numbered prefix (e.g. "1.1 Definitions").
   - Third-level sections (e.g. id "1.1.1") use <h4> with a numbered prefix.
-  - Indent nested content within <section> tags to reflect structure.
+  - Wrap nested content in <section> tags to reflect structure.
   - Do not use <h1>; it is reserved for the document title.
+
+  Data-quality issue injection:
+  - When inject_issue is "yes", embed exactly one issue of the specified label into this section and report it in issues_applied.
+  - When inject_issue is "no", inject no issue, set issues_applied to [], and set issue_sentence to "none".
+  - When inject_issue is "yes", write issue_sentence BEFORE html_content. Compose the sentence with the defect already present, then build html_content around it so the sentence appears verbatim.
+  - For minor_typo_or_formatting: the defect MUST be visible in the raw characters of issue_sentence. A clean sentence is a failed generation. Before writing anything, pick exactly one word to misspell (e.g. swap two letters, drop a letter, or double a letter) or insert a double whitespace gap or add a space before a punctuation mark. Embed that flaw in issue_sentence and do NOT correct it afterward.
+  - Allowed visible defects for minor_typo_or_formatting (choose one):
+    1) a double space between two words (two literal space characters, e.g. "encryption  and"), or
+    2) one minor misspelling of a non-critical word (e.g. "occured", "recieve", "encyption", "adminsitrative", "requirments", "procesing"), or
+    3) a extra space before a punctuation mark (e.g. "data ." or "policy ,").
+  - Use exactly one of these canonical labels when reporting:
+    contradictory_clause, ambiguous_language, minor_typo_or_formatting, inconsistent_terminology_or_cross_reference.
+  - If inject_issue is "yes", inject only the requested issue type; all other aspects of the section must remain consistent with prior sections and terminology.
+
+  Issue style reference (adapt to the actual document type and context):
+
+  1. contradictory_clause
+     Example context: Service Level Agreement
+     One section states "The Service will maintain an uptime of 99.9% per calendar month."
+     A later clause states "Scheduled maintenance may occur at any time without prior notice and shall not be included in uptime calculations."
+     Why it works: "Any time without notice" directly conflicts with a strict 99.9% uptime guarantee. If maintenance is frequent or unannounced the uptime commitment becomes unenforceable.
+
+  2. ambiguous_language
+     Example context: Privacy Policy
+     A clause reads "We retain personal data for as long as necessary to fulfill the purposes outlined in this policy."
+     Why it works: "As long as necessary" provides no concrete retention period or measurable criteria — it is entirely open to interpretation and gives the company unlimited discretion.
+
+  3. minor_typo_or_formatting
+     Example context: Security Whitepaper
+     A sentence reads "All data is encrypted using AES-256 encryption  and transmitted over TLS 1.2." (note the double space before "and")
+     Why it works: A subtle extra space or minor spelling error (e.g. "encyption") is realistic in professional documents and easy to overlook during review.
+
+  4. inconsistent_terminology_or_cross_reference
+     Example context: Data Processing Agreement
+     Section 1.2 defines "Customer Data" as all personal data processed by the Processor.
+     Section 4.1 later refers to "Client Data" without definition.
+     Why it works: Using "Customer Data" and "Client Data" interchangeably without a mapping creates ambiguity about whether they reference the same concept.

@@ -63,13 +63,13 @@ def generate(
         None,
         help="Seconds to pause between section calls for TPM pacing.",
     ),
-    section_summary_max_chars: int | None = typer.Option(
+    section_max_validation_retries: int | None = typer.Option(
         None,
-        help="Max characters in previous-sections summary.",
+        help="Max content-validation retries per section.",
     ),
-    section_last_section_max_chars: int | None = typer.Option(
+    toc_max_validation_retries: int | None = typer.Option(
         None,
-        help="Max characters kept for last full section HTML context.",
+        help="Max content-validation retries per TOC.",
     ),
     output_dir: Path | None = typer.Option(None, help="Output directory path."),
     document_type: list[str] | None = typer.Option(
@@ -93,8 +93,8 @@ def generate(
         rate_limit_base_backoff_seconds=rate_limit_base_backoff_seconds,
         rate_limit_max_backoff_seconds=rate_limit_max_backoff_seconds,
         section_delay_seconds=section_delay_seconds,
-        section_summary_max_chars=section_summary_max_chars,
-        section_last_section_max_chars=section_last_section_max_chars,
+        section_max_validation_retries=section_max_validation_retries,
+        toc_max_validation_retries=toc_max_validation_retries,
         output_dir=output_dir,
         document_types=document_type,
     )

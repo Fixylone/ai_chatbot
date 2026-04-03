@@ -11,23 +11,16 @@ template: |
   Full TOC JSON:
   {toc_json}
 
-  Issue injection for this section:
+  Issue injection:
   - Inject issue: {inject_issue}
   - Issue label: {required_issue_label}
-  - If inject issue is "no", return issues_applied as [] and do not inject any issue.
-  - If inject issue is "yes", inject exactly one data-quality issue of the specified label into the section HTML and return issues_applied as ["{required_issue_label}"].
-  - Allowed issue labels: contradictory_clause, ambiguous_language, minor_typo_or_formatting, inconsistent_terminology_or_cross_reference.
-  - Use the actual tool name "{tool_name}" in prose; do not output placeholders such as [CompanyName] or [Company Name].
-  - Keep this section substantial (typically 2-4 paragraphs unless naturally shorter).
+  - Output contract: return issue_sentence="none" when inject_issue is "no"; otherwise return the exact sentence from html_content containing the injected issue.
 
-  Previous sections summary (compressed):
-  {previous_sections_summary}
-
-  Last full section HTML:
-  {last_full_section_html}
+  Previously generated sections (full HTML):
+  {previous_sections_html}
 
   Current section target:
-  - Target section id: {section_id}
-  - Target section title: {section_title}
+  - Section id: {section_id}
+  - Section title: {section_title}
 
   Generate only the target section content as HTML.
