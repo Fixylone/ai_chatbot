@@ -16,10 +16,23 @@ from chatbot.utils import to_snake_case
 etree = cast(Any, _etree)
 _HTML_TAG_PATTERN = re.compile(r"<\s*[a-zA-Z][^>]*>")
 _TAG_INVALID_PATTERN = re.compile(r"Tag (\w+) invalid")
-_HTML5_TAGS = frozenset({
-    "article", "aside", "details", "figcaption", "figure", "footer",
-    "header", "main", "mark", "nav", "section", "summary", "time",
-})
+_HTML5_TAGS = frozenset(
+    {
+        "article",
+        "aside",
+        "details",
+        "figcaption",
+        "figure",
+        "footer",
+        "header",
+        "main",
+        "mark",
+        "nav",
+        "section",
+        "summary",
+        "time",
+    }
+)
 
 
 def build_html_filename(document_type: str) -> str:
@@ -37,10 +50,10 @@ def assemble_document_html(
 
     return (
         "<!DOCTYPE html>\n"
-        "<html lang=\"en\">\n"
+        '<html lang="en">\n'
         "<head>\n"
-        "  <meta charset=\"utf-8\" />\n"
-        "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n"
+        '  <meta charset="utf-8" />\n'
+        '  <meta name="viewport" content="width=device-width, initial-scale=1" />\n'
         f"  <title>{escape(title)}</title>\n"
         "  <style>\n"
         "    body { font-family: Georgia, serif; line-height: 1.55; "
@@ -52,7 +65,7 @@ def assemble_document_html(
         "</head>\n"
         "<body>\n"
         f"  <h1>{escape(toc.document_type)}</h1>\n"
-        f"  <p class=\"doc-meta\"><strong>Tool:</strong> {escape(toc.tool_name)}</p>\n"
+        f'  <p class="doc-meta"><strong>Tool:</strong> {escape(toc.tool_name)}</p>\n'
         f"{body_content}\n"
         "</body>\n"
         "</html>\n"

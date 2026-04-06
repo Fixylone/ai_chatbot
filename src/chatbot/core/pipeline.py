@@ -13,7 +13,9 @@ from chatbot.core.models import (
     ToolDescription,
 )
 from chatbot.services.data_generation.ideation import generate_tool_ideation
-from chatbot.services.data_generation.section_generator import generate_document_sections
+from chatbot.services.data_generation.section_generator import (
+    generate_document_sections,
+)
 from chatbot.services.data_generation.toc_generator import generate_table_of_contents
 from chatbot.utils import to_snake_case
 from chatbot.utils.html_utils import (
@@ -57,7 +59,9 @@ async def _generate_single_document(
             document_type=document_type,
             html_path=str(html_path),
             toc_path=str(toc_path),
-            issues_manifest_path=str(tool_dir / build_issue_manifest_filename(document_type)),
+            issues_manifest_path=str(
+                tool_dir / build_issue_manifest_filename(document_type)
+            ),
             total_sections=0,
             issues_summary=[],
         )
@@ -68,16 +72,21 @@ async def _generate_single_document(
     doc_start = time.monotonic()
 
     toc = await generate_table_of_contents(
-        config, tool, document_type, temperature=toc_temp,
+        config,
+        tool,
+        document_type,
+        temperature=toc_temp,
     )
     sections = await generate_document_sections(
-        config, tool, toc, temperature=section_temp,
+        config,
+        tool,
+        toc,
+        temperature=section_temp,
     )
 
     generation_time = time.monotonic() - doc_start
     print(
-        f"[timing] {document_type} for {tool.name}: "
-        f"{generation_time:.1f}s",
+        f"[timing] {document_type} for {tool.name}: {generation_time:.1f}s",
         flush=True,
     )
 
@@ -152,8 +161,7 @@ async def run_pipeline(
             record = await _generate_single_document(config, tool, doc_type)
             records.append(record)
             print(
-                f"[pipeline] completed {record.document_type} "
-                f"for {record.tool_name}",
+                f"[pipeline] completed {record.document_type} for {record.tool_name}",
                 flush=True,
             )
 

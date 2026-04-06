@@ -5,13 +5,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import cast
 
-from mirascope import llm 
+from mirascope import llm
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import (
+    TableOfContents,
     TOCEntry,
     TOCEntryResponse,
-    TableOfContents,
     TOCResponse,
     ToolDescription,
 )

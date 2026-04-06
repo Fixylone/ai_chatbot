@@ -42,8 +42,9 @@ class IdeationResponse(BaseModel):
 
 # -- Table of Contents -----------------------------------------------
 
+
 class TOCEntry(BaseModel):
-    """A single node in the document outline. Supports arbitrary nesting depth — not hard-coded to 2 levels."""
+    """A single node in the document outline."""
 
     id: str = Field(description="Section identifier (e.g. '2.1.3')")
     title: str = Field(description="Section heading text")
@@ -84,6 +85,7 @@ class TOCResponse(BaseModel):
 
 
 # -- Section Generation ----------------------------------------------
+
 
 class SectionOutput(BaseModel):
     """Internal representation of a generated HTML section."""

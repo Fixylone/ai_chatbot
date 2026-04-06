@@ -2,7 +2,7 @@
 
 Phase 1 synthetic legal/compliance document generator.
 
-This project generates synthetic legal-style datasets for fictional software
+The pipeline generates synthetic legal-style datasets for fictional software
 tools, including:
 
 - Structured TOC files (`toc_*.json`)
@@ -15,7 +15,8 @@ tools, including:
 1. Generates fictional tool descriptions.
 2. Assigns document types per tool.
 3. Generates structured TOC JSON per document.
-4. Generates section-by-section HTML content using TOC + prior section context.
+4. Generates section-by-section HTML content using TOC and full prior-section
+   context.
 5. Generates section-level issue manifest JSON per document.
 6. Validates all generated outputs.
 
@@ -24,48 +25,75 @@ tools, including:
 The project follows a `src` layout:
 
 - `src/chatbot/core`: config, models, pipeline orchestration
-- `src/chatbot/services`: ideation, TOC, and section generation
+- `src/chatbot/services/data_generation`: ideation, TOC, and section generation
 - `src/chatbot/utils`: prompt loading, HTML/JSON helpers, validation
 - `src/chatbot/prompts`: YAML prompt templates
+- `tests`: unit tests
 - `data`: generated artifacts
 
 ## Configuration
 
-Default settings are in `config.yaml` and can be overridden via CLI flags or
-environment variables (`CHATBOT_*`).
+Defaults are in `config.yaml` and can be overridden via:
 
-Current default model strategy:
+- CLI flags
+- Environment variables with `CHATBOT_` prefix
 
-- `toc_model: l2-gpt-4.1-mini` (reasoning-focused TOC generation)
-- `section_model: l2-gpt-4o-mini` (cost-efficient section drafting)
-- `ideation_model: l2-gpt-4.1-nano` (strong tool ideation quality/cost)
+Current default model IDs:
 
-Validation rule: at least two distinct model IDs are required across these
-three generation stages.
+- `toc_model: openai/l2-gpt-4.1-nano`
+- `section_model: openai/l2-gpt-4.1-mini`
+- `ideation_model: openai/l2-gpt-4.1-nano`
+
+## First-time setup
+
+### 1) Install dependencies
+
+From repository root:
+
+```bash
+uv sync --all-groups
+```
+
+### 2) Set credentials
+
+Set the environment variables required by your model gateway/provider.
+
+PowerShell example:
+
+```powershell
+$env:OPENAI_API_KEY = "<your_key_here>"
+```
+
+### 3) Quick sanity checks
+
+```bash
+uv run chatbot --help
+uv run pytest -q
+```
 
 ## Usage
 
-Install dependencies in your active environment, then run:
+Generate dataset:
 
 ```bash
-chatbot generate --config config.yaml
+uv run chatbot generate --config config.yaml
 ```
 
-Validate output directory:
+Validate generated output:
 
 ```bash
-chatbot validate --output-dir data
+uv run chatbot validate --output-dir data
 ```
 
-Example overrides:
+Example generation override:
 
 ```bash
-chatbot generate \
-	--toc-model l2-gpt-4.1-mini \
-	--section-model l2-gpt-4o-mini \
-	--ideation-model l2-gpt-4.1-nano \
-	--num-tools 5 \
-	--docs-per-tool 4
+uv run chatbot generate \
+  --config config.yaml \
+  --num-tools 5 \
+  --docs-per-tool 4 \
+  --section-max-validation-retries 5 \
+  --toc-max-validation-retries 3
 ```
 
 ## Output layout
@@ -74,11 +102,11 @@ Generated files are organized per tool:
 
 ```text
 data/
-	<tool_name_slug>/
-		toc_privacy_policy.json
-		issues_privacy_policy.json
-		privacy_policy.html
-		...
+  <tool_name_slug>/
+    toc_privacy_policy.json
+    issues_privacy_policy.json
+    privacy_policy.html
+    ...
 ```
 
 ## Notes
@@ -86,12 +114,4 @@ data/
 - Prompt templates are externalized in YAML files (not inline code strings).
 - TOC and section generation use strict structured outputs.
 - Section generation enforces 2-3 total intentional quality issues per document.
-- Runtime resilience is retry-only (bounded exponential backoff for transient
-  failures).
-- Section continuity context is compressed into:
-	- summary of previous sections
-	- full HTML of the most recent generated section
-- Optional prompt caching controls are available in `config.yaml`:
-	- `prompt_caching_enabled`
-	- `prompt_cache_retention`
-	- `prompt_cache_key_namespace`
+- Runtime resilience uses bounded exponential backoff for transient failures.

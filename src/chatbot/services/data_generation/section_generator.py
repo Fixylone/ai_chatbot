@@ -11,13 +11,16 @@ from mirascope import llm
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import (
-    SectionResponse,
     SectionOutput,
+    SectionResponse,
     TableOfContents,
     TOCEntry,
     ToolDescription,
 )
-from chatbot.services.data_generation.issue_plan_manager import IssuePlanManager, SectionIssueRequirement
+from chatbot.services.data_generation.issue_plan_manager import (
+    IssuePlanManager,
+    SectionIssueRequirement,
+)
 from chatbot.utils.html_utils import (
     is_valid_html_fragment,
 )
@@ -98,14 +101,12 @@ async def generate_document_sections(
 
     toc_json = toc.model_dump_json()
     generated: list[SectionOutput] = []
+    previous_sections_html = ""
     total_issues = 0
     max_attempts = config.section_max_validation_retries
 
     for section in ordered:
         section_start = time.monotonic()
-        previous_sections_html = "\n\n".join(
-            s.html_content for s in generated
-        )
         req = issue_mgr.requirement_for(section.id, total_issues)
 
         print(
@@ -139,15 +140,15 @@ async def generate_document_sections(
                     "otherwise compose a sentence that contains the visible "
                     "defect, then include that sentence verbatim in html_content."
                 )
-                call_prompt = (
-                    f"{prompt}\n\n"
-                    f"{retry_instruction}"
-                )
+                call_prompt = f"{prompt}\n\n{retry_instruction}"
 
             stage = f"section:{toc.document_type}:{section.id}:attempt-{attempt}"
             response = await call_llm_with_retries(
-                _section_call, call_prompt, config,
-                stage=stage, model_id=config.section_model,
+                _section_call,
+                call_prompt,
+                config,
+                stage=stage,
+                model_id=config.section_model,
             )
 
             candidate = cast(SectionResponse, response.parse())
@@ -157,9 +158,17 @@ async def generate_document_sections(
             if req.required_issue_count == 0:
                 sentence_ok = sentence.lower() == "none"
             else:
-                sentence_ok = bool(sentence) and sentence.lower() != "none" and sentence in candidate.html_content
+                sentence_ok = (
+                    bool(sentence)
+                    and sentence.lower() != "none"
+                    and sentence in candidate.html_content
+                )
 
-            if issues_ok and sentence_ok and is_valid_html_fragment(candidate.html_content):
+            if (
+                issues_ok
+                and sentence_ok
+                and is_valid_html_fragment(candidate.html_content)
+            ):
                 result = SectionOutput(
                     section_id=section.id,
                     html_content=candidate.html_content,
@@ -170,7 +179,8 @@ async def generate_document_sections(
 
         if result is None:
             expected = (
-                "[]" if req.required_issue_label is None
+                "[]"
+                if req.required_issue_label is None
                 else f'["{req.required_issue_label}"]'
             )
             raise ValueError(
@@ -179,6 +189,12 @@ async def generate_document_sections(
             )
 
         generated.append(result)
+        if previous_sections_html:
+            previous_sections_html = (
+                f"{previous_sections_html}\n\n{result.html_content}"
+            )
+        else:
+            previous_sections_html = result.html_content
         total_issues += len(result.issues_applied)
 
         # Adaptive RPM pacing — only sleep if request was faster than the
@@ -196,4 +212,3 @@ async def generate_document_sections(
 
     issue_mgr.validate_document_totals(total_issues)
     return generated
-
