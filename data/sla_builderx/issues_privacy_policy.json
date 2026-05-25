@@ -1,0 +1,158 @@
+{
+  "tool_name": "SLA BuilderX",
+  "document_type": "Privacy Policy",
+  "total_issues": 3,
+  "sections": [
+    {
+      "section_id": "1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.1",
+      "issues_applied": [
+        "contradictory_clause"
+      ],
+      "issue_sentence": "SLA BuilderX shares personal data freely with third parties without restrictions, except where limited by applicable law."
+    },
+    {
+      "section_id": "3.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.1",
+      "issues_applied": [
+        "inconsistent_terminology_or_cross_reference"
+      ],
+      "issue_sentence": "Access to confidential information within SLA BuilderX is limited to authorized users who require such access to perform their duties."
+    },
+    {
+      "section_id": "4.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.1",
+      "issues_applied": [
+        "ambiguous_language"
+      ],
+      "issue_sentence": "SLA BuilderX may update this Privacy Policy from time to time, without a fixed schedule, to address changes in legal requirements, business operations, or platform features."
+    },
+    {
+      "section_id": "7.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    }
+  ]
+}

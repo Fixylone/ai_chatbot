@@ -1,0 +1,178 @@
+{
+  "tool_name": "ClauseForge",
+  "document_type": "Data Processing Agreement",
+  "total_issues": 3,
+  "sections": [
+    {
+      "section_id": "1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.2",
+      "issues_applied": [
+        "ambiguous_language"
+      ],
+      "issue_sentence": "The Data Processor may engage Sub-processors to assist in processing personal data, provided that such engagement is subject to reasonable conditions set forth by the Data Controller."
+    },
+    {
+      "section_id": "2.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.4",
+      "issues_applied": [
+        "inconsistent_terminology_or_cross_reference"
+      ],
+      "issue_sentence": "The Client shall ensure that all instructions given to the Data Processor comply with applicable data protection laws and regulations."
+    },
+    {
+      "section_id": "3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.1",
+      "issues_applied": [
+        "contradictory_clause"
+      ],
+      "issue_sentence": "The Data Processor shall process personal data solely for the purposes specified by the Data Controller, but may also use the data for its own internal analytics without prior consent."
+    },
+    {
+      "section_id": "3.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.4",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    }
+  ]
+}

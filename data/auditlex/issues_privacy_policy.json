@@ -1,0 +1,168 @@
+{
+  "tool_name": "AuditLex",
+  "document_type": "Privacy Policy",
+  "total_issues": 3,
+  "sections": [
+    {
+      "section_id": "1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.1.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.1.2",
+      "issues_applied": [
+        "minor_typo_or_formatting"
+      ],
+      "issue_sentence": "AuditLex collects Usage Data and Technical Data to monitor service performance  and enhance user experience."
+    },
+    {
+      "section_id": "2.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.2",
+      "issues_applied": [
+        "contradictory_clause"
+      ],
+      "issue_sentence": "Users have the right to object to the processing of their Personal Data, but AuditLex reserves the right to continue processing such data without restriction in all circumstances."
+    },
+    {
+      "section_id": "6.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8",
+      "issues_applied": [
+        "inconsistent_terminology_or_cross_reference"
+      ],
+      "issue_sentence": "AuditLex will notify Users of any material changes to this Privacy Notice through appropriate communication channels."
+    },
+    {
+      "section_id": "8.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    }
+  ]
+}

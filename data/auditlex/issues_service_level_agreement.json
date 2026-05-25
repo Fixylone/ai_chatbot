@@ -1,0 +1,201 @@
+{
+  "tool_name": "AuditLex",
+  "document_type": "Service Level Agreement",
+  "total_issues": 2,
+  "sections": [
+    {
+      "section_id": "1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.1",
+      "issues_applied": [
+        "ambiguous_language"
+      ],
+      "issue_sentence": "The purpose of this Agreement is to establish the terms under which the Provider will deliver services using AuditLex, ensuring compliance and audit readiness to the extent deemed appropriate by the parties."
+    },
+    {
+      "section_id": "1.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.2.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.2.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.2.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.1",
+      "issues_applied": [
+        "inconsistent_terminology_or_cross_reference"
+      ],
+      "issue_sentence": "Except for liability arising from gross negligence, willful misconduct, or breach of confidentiality obligations as set forth in Section 7, the Provider's total liability under this Agreement shall be limited to the amount of fees paid by the Client for the services during the twelve (12) months preceding the claim."
+    },
+    {
+      "section_id": "8.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "9.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "10",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    }
+  ]
+}

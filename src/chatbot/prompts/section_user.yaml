@@ -22,5 +22,8 @@ template: |
   Current section target:
   - Section id: {section_id}
   - Section title: {section_title}
+  - Output one wrapper for this section only: <section id="{section_id}">...</section>.
+  - Use no other id attributes and no additional section blocks.
+  - Do not reuse any section id already present in previous_sections_html.
 
   Generate only the target section content as HTML.

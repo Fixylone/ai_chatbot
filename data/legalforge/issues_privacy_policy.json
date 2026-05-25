@@ -1,0 +1,156 @@
+{
+  "tool_name": "LegalForge",
+  "document_type": "Privacy Policy",
+  "total_issues": 2,
+  "sections": [
+    {
+      "section_id": "1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "2.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "3.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "4.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.1",
+      "issues_applied": [
+        "inconsistent_terminology_or_cross_reference"
+      ],
+      "issue_sentence": "Users have the right to access their Client Data held by our organization upon request, subject to applicable laws and verification processes."
+    },
+    {
+      "section_id": "5.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "5.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "6.1",
+      "issues_applied": [
+        "minor_typo_or_formatting"
+      ],
+      "issue_sentence": "Our organization ensures that all cross-border data transfers comply with applicable data protection laws  and implement appropriate safeguards to protect personal data."
+    },
+    {
+      "section_id": "6.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "7.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.1",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "8.2",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    }
+  ]
+}

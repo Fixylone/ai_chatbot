@@ -1,0 +1,38 @@
+{
+  "tool_name": "SLA BuilderX",
+  "document_type": "Service Level Agreement",
+  "total_issues": 3,
+  "sections": [
+    {
+      "section_id": "1",
+      "issues_applied": [
+        "inconsistent_terminology_or_cross_reference"
+      ],
+      "issue_sentence": "SLA BuilderX enables creation and management of detailed Service Level Agreements tailored to enterprise services, providing IT service managers and legal teams with a comprehensive tool for SLA development and administration."
+    },
+    {
+      "section_id": "1.1",
+      "issues_applied": [
+        "contradictory_clause"
+      ],
+      "issue_sentence": "The purpose of this Agreement is to ensure uninterrupted service delivery while allowing the Provider to suspend services at any time without prior notice."
+    },
+    {
+      "section_id": "1.2",
+      "issues_applied": [
+        "ambiguous_language"
+      ],
+      "issue_sentence": "The Provider shall deliver services as described in the documentation, subject to changes at their discretion."
+    },
+    {
+      "section_id": "1.3",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    },
+    {
+      "section_id": "1.4",
+      "issues_applied": [],
+      "issue_sentence": "none"
+    }
+  ]
+}

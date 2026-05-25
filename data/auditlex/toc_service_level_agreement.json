@@ -1,0 +1,206 @@
+{
+  "document_type": "Service Level Agreement",
+  "tool_name": "AuditLex",
+  "sections": [
+    {
+      "id": "1",
+      "title": "1. Introduction",
+      "children": [
+        {
+          "id": "1.1",
+          "title": "1.1 Purpose of the Agreement",
+          "children": []
+        },
+        {
+          "id": "1.2",
+          "title": "1.2 Scope of Services",
+          "children": []
+        },
+        {
+          "id": "1.3",
+          "title": "1.3 Definitions and Interpretations",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "2. Service Description and Performance Standards",
+      "children": [
+        {
+          "id": "2.1",
+          "title": "2.1 Service Description",
+          "children": []
+        },
+        {
+          "id": "2.2",
+          "title": "2.2 Service Levels and Performance Metrics",
+          "children": [
+            {
+              "id": "2.2.1",
+              "title": "2.2.1 Response Times",
+              "children": []
+            },
+            {
+              "id": "2.2.2",
+              "title": "2.2.2 Resolution Times",
+              "children": []
+            },
+            {
+              "id": "2.2.3",
+              "title": "2.2.3 Availability and Uptime",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "2.3",
+          "title": "2.3 Service Level Targets and Commitments",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "3. Responsibilities of the Parties",
+      "children": [
+        {
+          "id": "3.1",
+          "title": "3.1 Provider Responsibilities",
+          "children": []
+        },
+        {
+          "id": "3.2",
+          "title": "3.2 Customer Responsibilities",
+          "children": []
+        },
+        {
+          "id": "3.3",
+          "title": "3.3 Cooperation and Support",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "4. Service Management and Monitoring",
+      "children": [
+        {
+          "id": "4.1",
+          "title": "4.1 Service Monitoring and Reporting",
+          "children": []
+        },
+        {
+          "id": "4.2",
+          "title": "4.2 Incident Management",
+          "children": []
+        },
+        {
+          "id": "4.3",
+          "title": "4.3 Review Meetings and Performance Reviews",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "5. Compensation and Penalties",
+      "children": [
+        {
+          "id": "5.1",
+          "title": "5.1 Service Credits and Remedies",
+          "children": []
+        },
+        {
+          "id": "5.2",
+          "title": "5.2 Penalties for Non-Performance",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "6. Term, Renewal, and Termination",
+      "children": [
+        {
+          "id": "6.1",
+          "title": "6.1 Term of the Agreement",
+          "children": []
+        },
+        {
+          "id": "6.2",
+          "title": "6.2 Renewal Terms",
+          "children": []
+        },
+        {
+          "id": "6.3",
+          "title": "6.3 Termination Conditions and Procedures",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "7. Confidentiality and Data Security",
+      "children": [
+        {
+          "id": "7.1",
+          "title": "7.1 Confidential Information",
+          "children": []
+        },
+        {
+          "id": "7.2",
+          "title": "7.2 Data Security Measures",
+          "children": []
+        },
+        {
+          "id": "7.3",
+          "title": "7.3 Data Breach Notification and Response",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "8. Liability and Indemnification",
+      "children": [
+        {
+          "id": "8.1",
+          "title": "8.1 Limitation of Liability",
+          "children": []
+        },
+        {
+          "id": "8.2",
+          "title": "8.2 Indemnity Obligations",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "9. Miscellaneous Provisions",
+      "children": [
+        {
+          "id": "9.1",
+          "title": "9.1 Governing Law and Jurisdiction",
+          "children": []
+        },
+        {
+          "id": "9.2",
+          "title": "9.2 Dispute Resolution",
+          "children": []
+        },
+        {
+          "id": "9.3",
+          "title": "9.3 Amendments and Waivers",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "10. Signatures and Execution",
+      "children": []
+    }
+  ]
+}

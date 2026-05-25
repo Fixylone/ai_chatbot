@@ -15,7 +15,10 @@ template: |
   - Top-level sections (e.g. id "1") use <h2> with a numbered prefix (e.g. "1. Introduction").
   - Second-level sections (e.g. id "1.1") use <h3> with a numbered prefix (e.g. "1.1 Definitions").
   - Third-level sections (e.g. id "1.1.1") use <h4> with a numbered prefix.
-  - Wrap nested content in <section> tags to reflect structure.
+   - Output exactly one wrapper: <section id="TARGET_SECTION_ID">...</section>.
+   - html_content must contain exactly one id attribute total, and it must be that wrapper id.
+   - The section id must be unique in the document; never reuse an id already present in prior sections context.
+   - Do not include child/sibling section blocks or any other id attributes.
   - Do not use <h1>; it is reserved for the document title.
 
   Data-quality issue injection:

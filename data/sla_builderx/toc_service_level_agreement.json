@@ -1,0 +1,32 @@
+{
+  "document_type": "Service Level Agreement",
+  "tool_name": "SLA BuilderX",
+  "sections": [
+    {
+      "id": "1",
+      "title": "1. Introduction",
+      "children": [
+        {
+          "id": "1.1",
+          "title": "1.1 Purpose of the Agreement",
+          "children": []
+        },
+        {
+          "id": "1.2",
+          "title": "1.2 Scope of Services",
+          "children": []
+        },
+        {
+          "id": "1.3",
+          "title": "1.3 Definitions and Interpretations",
+          "children": []
+        },
+        {
+          "id": "1.4",
+          "title": "1.4 Effective Date and Duration",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

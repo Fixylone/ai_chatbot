@@ -1,0 +1,171 @@
+{
+  "document_type": "Privacy Policy",
+  "tool_name": "AuditLex",
+  "sections": [
+    {
+      "id": "1",
+      "title": "1. Introduction",
+      "children": [
+        {
+          "id": "1.1",
+          "title": "1.1 Purpose of This Privacy Policy",
+          "children": []
+        },
+        {
+          "id": "1.2",
+          "title": "1.2 Scope and Applicability",
+          "children": []
+        },
+        {
+          "id": "1.3",
+          "title": "1.3 Definitions and Interpretations",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "2. Information We Collect",
+      "children": [
+        {
+          "id": "2.1",
+          "title": "2.1 Types of Data Collected",
+          "children": [
+            {
+              "id": "2.1.1",
+              "title": "2.1.1 Personal Identifiable Information (PII)",
+              "children": []
+            },
+            {
+              "id": "2.1.2",
+              "title": "2.1.2 Usage Data and Technical Data",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "2.2",
+          "title": "2.2 Methods of Data Collection",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "3. How We Use Your Information",
+      "children": [
+        {
+          "id": "3.1",
+          "title": "3.1 Purposes of Data Processing",
+          "children": []
+        },
+        {
+          "id": "3.2",
+          "title": "3.2 Legal Bases for Processing",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "4. Sharing of Information",
+      "children": [
+        {
+          "id": "4.1",
+          "title": "4.1 Third Parties and Service Providers",
+          "children": []
+        },
+        {
+          "id": "4.2",
+          "title": "4.2 Legal and Regulatory Disclosures",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "5. Data Retention and Deletion",
+      "children": [
+        {
+          "id": "5.1",
+          "title": "5.1 Data Retention Periods",
+          "children": []
+        },
+        {
+          "id": "5.2",
+          "title": "5.2 Data Deletion Procedures",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "6. User Rights and Choices",
+      "children": [
+        {
+          "id": "6.1",
+          "title": "6.1 Access and Correction Rights",
+          "children": []
+        },
+        {
+          "id": "6.2",
+          "title": "6.2 Data Portability and Objection Rights",
+          "children": []
+        },
+        {
+          "id": "6.3",
+          "title": "6.3 How to Exercise Your Rights",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "7. Security Measures",
+      "children": [
+        {
+          "id": "7.1",
+          "title": "7.1 Technical Security Measures",
+          "children": []
+        },
+        {
+          "id": "7.2",
+          "title": "7.2 Organizational Security Measures",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "8. Changes to This Privacy Policy",
+      "children": [
+        {
+          "id": "8.1",
+          "title": "8.1 Notification of Changes",
+          "children": []
+        },
+        {
+          "id": "8.2",
+          "title": "8.2 Effective Date of Amendments",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "9. Contact Information",
+      "children": [
+        {
+          "id": "9.1",
+          "title": "9.1 Data Controller Contact Details",
+          "children": []
+        },
+        {
+          "id": "9.2",
+          "title": "9.2 Data Protection Officer (DPO) Contact",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
