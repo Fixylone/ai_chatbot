@@ -10,7 +10,7 @@ from mirascope import llm
 
 from chatbot.core.config import GenerationConfig
 from chatbot.core.models import IdeationResponse, IdeationResult, ToolDescription
-from chatbot.utils.llm_runtime import call_llm_with_retries
+from chatbot.utils.llm_runtime import retry_llm_call
 from chatbot.utils.prompt_loader import render_prompt
 
 _PROMPTS_DIR = Path(__file__).resolve().parents[2] / "prompts"
@@ -53,12 +53,10 @@ async def generate_tool_ideation(config: GenerationConfig) -> IdeationResult:
     def _ideation_call(prompt_text: str) -> str:
         return prompt_text
 
-    response = await call_llm_with_retries(
+    response = await retry_llm_call(
         _ideation_call,
         prompt,
         config,
-        stage="ideation",
-        model_id=config.ideation_model,
     )
     parsed = cast(IdeationResponse, response.parse())
 

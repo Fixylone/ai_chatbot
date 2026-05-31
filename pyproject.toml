@@ -21,9 +21,10 @@ dependencies = [
 
 [project.scripts]
 chatbot = "chatbot.cli:app"
+chatbot-console = "chatbot_console.api.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/chatbot"]
+packages = ["src/chatbot", "src/chatbot_console"]
 
 [dependency-groups]
 dev = [

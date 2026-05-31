@@ -1,0 +1,39 @@
+# Console Chatbot Configuration
+# Override with CHATBOT_CHAT_* env vars or CLI flags.
+
+chat_model: "openai/l2-gpt-4.1-mini"
+chat_temperature: 0.4
+chat_top_p: 0.95
+
+# Keeps only non-system messages; system prompt is always retained.
+max_history_messages: 24
+
+# Prompt template path relative to project root.
+system_prompt_path: "src/chatbot_console/prompts/chat_system.yaml"
+
+# Required assignment tools.
+enable_get_current_date: true
+enable_add_days_to_date: true
+
+# Summary request keywords.
+summary_keywords:
+  - "summary"
+  - "summarize"
+  - "recap"
+  - "overview"
+
+# Session exit commands.
+exit_commands:
+  - "exit"
+  - "quit"
+  - "/exit"
+
+# Optional provider overrides.
+api_base_url:
+api_key:
+request_timeout_seconds: 30.0
+
+# Runtime retry strategy for transient model errors.
+rate_limit_max_retries: 0
+rate_limit_base_backoff_seconds: 1.5
+rate_limit_max_backoff_seconds: 30.0

@@ -15,7 +15,7 @@ from chatbot.core.models import (
     TOCResponse,
     ToolDescription,
 )
-from chatbot.utils.llm_runtime import call_llm_with_retries
+from chatbot.utils.llm_runtime import retry_llm_call
 from chatbot.utils.prompt_loader import render_prompt
 
 _PROMPTS_DIR = Path(__file__).resolve().parents[2] / "prompts"
@@ -84,13 +84,7 @@ async def generate_table_of_contents(
                 "nesting with at least some third-level structure where natural."
             )
 
-        response = await call_llm_with_retries(
-            _toc_call,
-            prompt,
-            config,
-            stage=f"toc:{document_type}:attempt-{attempt}",
-            model_id=config.toc_model,
-        )
+        response = await retry_llm_call(_toc_call, prompt, config)
         candidate = cast(TOCResponse, response.parse())
         mapped = [_map_entry(e) for e in candidate.sections]
 

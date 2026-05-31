@@ -24,7 +24,7 @@ from chatbot.services.data_generation.issue_plan_manager import (
 from chatbot.utils.html_utils import (
     is_valid_html_fragment,
 )
-from chatbot.utils.llm_runtime import call_llm_with_retries
+from chatbot.utils.llm_runtime import retry_llm_call
 from chatbot.utils.prompt_loader import render_prompt
 
 _PROMPTS_DIR = Path(__file__).resolve().parents[2] / "prompts"
@@ -145,14 +145,7 @@ async def generate_document_sections(
                 )
                 call_prompt = f"{prompt}\n\n{retry_instruction}"
 
-            stage = f"section:{toc.document_type}:{section.id}:attempt-{attempt}"
-            response = await call_llm_with_retries(
-                _section_call,
-                call_prompt,
-                config,
-                stage=stage,
-                model_id=config.section_model,
-            )
+            response = await retry_llm_call(_section_call, call_prompt, config)
 
             candidate = cast(SectionResponse, response.parse())
             issues_ok = issue_mgr.issues_match(section.id, candidate.issues_applied)
